@@ -19,7 +19,7 @@ export default function BioSpotlight() {
               />
             </div>
             {/* Decorative background element for that "Production" feel */}
-            <div className="absolute -bottom-6 -right-6 w-full h-full border-4 border-primary/20 rounded-2xl -z-0"></div>
+            <div className="absolute -bottom-6 -right-6 w-full h-full border-4 border-primary/20 rounded-2xl z-0"></div>
           </div>
 
           {/* Text Side */}
