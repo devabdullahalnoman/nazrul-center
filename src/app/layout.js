@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,11 +26,13 @@ export default function RootLayout({ children }) {
         suppressHydrationWarning
       >
         {/* We will build the Navbar next */}
-        <header className="sticky top-0 z-50"><Navbar /></header>
+        <header className="sticky top-0 z-50">
+          <Navbar />
+        </header>
 
         <main className="grow w-11/12 mx-auto">{children}</main>
 
-        {/* Footer goes here later */}
+        <Footer />
       </body>
     </html>
   );

@@ -1,7 +1,9 @@
+"use client"; // This is now a Client Component for interactivity
+
+import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-// Mock data for production - replace with real images later!
 const featuredBooks = [
   {
     id: 1,
@@ -36,12 +38,29 @@ const featuredBooks = [
 ];
 
 export default function FeaturedBooks() {
+  // 1. Create a reference to the scrollable div
+  const scrollRef = useRef(null);
+
+  // 2. Function to handle the scrolling logic
+  const scroll = (direction) => {
+    if (scrollRef.current) {
+      const { current } = scrollRef;
+      const scrollAmount = 300; // Adjust this based on card width
+      if (direction === "left") {
+        current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+      } else {
+        current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+      }
+    }
+  };
+
   return (
     <section className="py-16 px-4">
-      <div className="container mx-auto">
+      <div className="container mx-auto relative">
         <div className="flex justify-between items-end mb-8">
           <div>
             <h2 className="text-3xl font-bold">Featured Books</h2>
+            <div className="divider w-24 divider-primary"></div>
             <p className="text-gray-600 mt-2">
               Explore masterpieces by the Rebel Poet
             </p>
@@ -51,8 +70,11 @@ export default function FeaturedBooks() {
           </Link>
         </div>
 
-        {/* Horizontal scroll container with snapping for mobile/tablet */}
-        <div className="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory hide-scrollbar">
+        {/* 3. Attach the ref to this div */}
+        <div
+          ref={scrollRef}
+          className="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory hide-scrollbar"
+        >
           {featuredBooks.map((book) => (
             <div
               key={book.id}
@@ -80,8 +102,52 @@ export default function FeaturedBooks() {
           ))}
         </div>
 
-        {/* Mobile-only view all button */}
-        <div className="text-center mt-4 sm:hidden">
+        {/* 4. Floating Arrows at the bottom */}
+        <div className="flex justify-center gap-4 mt-8">
+          <button
+            onClick={() => scroll("left")}
+            className="btn btn-circle btn-outline btn-primary shadow-md hover:scale-110 transition-transform flex items-center justify-center"
+            aria-label="Scroll Left"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 19.5L8.25 12l7.5-7.5"
+              />
+            </svg>
+          </button>
+
+          <button
+            onClick={() => scroll("right")}
+            className="btn btn-circle btn-outline btn-primary shadow-md hover:scale-110 transition-transform flex items-center justify-center"
+            aria-label="Scroll Right"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8.25 4.5l7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div className="text-center mt-8 sm:hidden">
           <Link href="/books" className="btn btn-outline btn-wide">
             View All Books
           </Link>

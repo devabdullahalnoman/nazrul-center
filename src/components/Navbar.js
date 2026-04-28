@@ -51,10 +51,11 @@ export default function Navbar() {
             <Image
               src="/logo.png"
               alt="Logo"
-              width={140}
-              height={40}
+              width={0}
+              height={0}
+              sizes="100vw"
+              style={{ width: "150px", height: "auto" }}
               priority
-              className="w-auto h-auto object-contain"
             />
           </div>
         </Link>
