@@ -20,14 +20,14 @@ export default function Home() {
         <section className="container mx-auto px-4 py-12 md:py-20">
           <GlobalSearch></GlobalSearch>
           <InfoGrid></InfoGrid>
-          <PopularSongs></PopularSongs>
-          <BioSpotlight></BioSpotlight>
           <ArchiveLibrary></ArchiveLibrary>
           <FeaturedBooks></FeaturedBooks>
+          <PopularSongs></PopularSongs>
+          <BioSpotlight></BioSpotlight>
+          <MediaSpotlight></MediaSpotlight>
           <UpcomingEvents></UpcomingEvents>
           <NewsEvents></NewsEvents>
           <Timeline></Timeline>
-          <MediaSpotlight></MediaSpotlight>
           <SupportSection></SupportSection>
           <Newsletter></Newsletter>
         </section>

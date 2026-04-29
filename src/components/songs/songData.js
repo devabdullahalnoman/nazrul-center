@@ -1,0 +1,58 @@
+export const songsData = [
+  {
+    id: 1,
+    title: "Karar Oi Louho Kopat",
+    category: "Revolutionary",
+    rag: "Bhairabi",
+    year: "1922",
+  },
+  {
+    id: 2,
+    title: "O Mon Romzaner Oi Rozar Sheshe",
+    category: "Islamic",
+    rag: "Folk-based",
+    year: "1932",
+  },
+  {
+    id: 3,
+    title: "Bagichay Bulbuli Tui",
+    category: "Ghazal",
+    rag: "Bhairabi",
+    year: "1928",
+  },
+  {
+    id: 4,
+    title: "Mamo Ek hate Bkabashir Banshi",
+    category: "Revolutionary",
+    rag: "Mixed",
+    year: "1922",
+  },
+  {
+    id: 5,
+    title: "Tribhubaner Priya Muhammad",
+    category: "Islamic",
+    rag: "Kirtan-based",
+    year: "1935",
+  },
+  {
+    id: 6,
+    title: "Arun Kanti Ke Go Jogi",
+    category: "Devotional",
+    rag: "Jog",
+    year: "1930",
+  },
+  {
+    id: 7,
+    title: "Kuhu Kuhu Koyelia",
+    category: "Nature",
+    rag: "Pilu",
+    year: "1934",
+  },
+  {
+    id: 8,
+    title: "Nohe Nohe Priyo",
+    category: "Romantic",
+    rag: "Mixed",
+    year: "1931",
+  },
+];

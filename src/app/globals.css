@@ -4,6 +4,25 @@
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Main Branding Colors */
+  --color-nazrul-bg: #f7e8e3; /* Soft Shell Background */
+  --color-nazrul-rebel: #ff1f1f; /* Electric Red Action */
+  --color-nazrul-ink: #946659; /* Coffee Brown Text */
+  --color-nazrul-clay: #b18e83; /* Rosy Brown Accents */
+  --color-nazrul-paper: #fffaf8; /* Bone White Cards */
+  --color-nazrul-muted: #cdcdcd; /* Silver Gray Utility */
+
+  /* Semantic Mapping for DaisyUI or custom components */
+  --color-primary: var(--color-nazrul-rebel);
+  --color-secondary: var(--color-nazrul-ink);
+  --color-accent: var(--color-nazrul-clay);
+}
+
+/* Optional: Set the default body background */
+body {
+  background-color: var(--color-nazrul-bg);
+  color: var(--color-nazrul-ink);
 }
 
 .hide-scrollbar::-webkit-scrollbar {
