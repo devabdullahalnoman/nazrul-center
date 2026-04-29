@@ -112,7 +112,7 @@ export default function PublicationsPage() {
                 className="card bg-base-100 shadow-sm hover:shadow-xl transition-all border border-base-200"
               >
                 <figure className="px-4 pt-4">
-                  <div className="aspect-[3/4] w-full bg-neutral-100 rounded-xl flex items-center justify-center text-gray-400 italic">
+                  <div className="aspect-3/4 w-full bg-neutral-100 rounded-xl flex items-center justify-center text-gray-400 italic">
                     {/* Cover Placeholder */}
                     Cover Image
                   </div>
