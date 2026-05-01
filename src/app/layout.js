@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import QueryProvider from "@/lib/query-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,7 +31,9 @@ export default function RootLayout({ children }) {
           <Navbar />
         </header>
 
-        <main className="grow w-11/12 mx-auto">{children}</main>
+        <QueryProvider>
+          <main className="grow w-11/12 mx-auto">{children}</main>
+        </QueryProvider>
 
         <Footer />
       </body>

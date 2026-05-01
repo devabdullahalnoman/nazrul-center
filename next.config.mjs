@@ -11,6 +11,12 @@ const nextConfig = {
         protocol: "https",
         hostname: "placehold.co",
       },
+      {
+        protocol: "https",
+        hostname: "rhaxakxqjpkjepkhpdnu.supabase.co", // Your Supabase Host
+        port: "",
+        pathname: "/storage/v1/object/public/**", // Matches all public storage files
+      },
     ],
   },
 };
