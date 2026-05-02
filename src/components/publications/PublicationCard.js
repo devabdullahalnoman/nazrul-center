@@ -4,16 +4,16 @@ export default function PublicationCard({ work }) {
   return (
     <div className="card bg-base-100 shadow-sm hover:shadow-xl transition-all border border-base-200 h-full">
       <figure className="px-4 pt-4">
-        {/* If there is a cover_url in the DB, show it. Otherwise, show placeholder */}
-        <div className="aspect-3/4 w-full bg-neutral-100 rounded-xl flex items-center justify-center overflow-hidden">
+        {/* Container with fixed aspect ratio and light background */}
+        <div className="relative aspect-3/4 w-full bg-gray-50 rounded-xl flex items-center justify-center overflow-hidden">
           {work.cover_url ? (
             <Image
               src={work.cover_url}
               alt={work.title}
-              width={0}
-              height={0}
-              sizes=""
-              className="w-full h-full object-cover"
+              fill // Using fill for Next.js 16 within a relative container
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+              className="object-contain p-2" // object-contain prevents cropping
+              priority={false}
             />
           ) : (
             <span className="text-gray-400 italic">No Cover Image</span>
