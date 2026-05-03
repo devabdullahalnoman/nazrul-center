@@ -4,14 +4,14 @@ import BioContent from "../../components/biography/BioContent";
 
 export default function BiographyPage() {
   return (
-    <div className="bg-base-100 min-h-screen">
+    <div className="bg-[#F7E8E3] min-h-screen">
       {/* Header Section */}
-      <div className="bg-neutral text-neutral-content py-16 px-4">
+      <div className="bg-[#D9C7AD] text-[#58161F] py-16 px-4">
         <div className="container mx-auto max-w-7xl">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
             Biography Of Kazi Nazrul Islam
           </h1>
-          <p className="text-xl text-primary font-medium tracking-wide">
+          <p className="text-2xl text-[#233620] font-semibold tracking-wide">
             The Rebel Poet of Bengal
           </p>
         </div>

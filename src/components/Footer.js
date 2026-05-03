@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
-    <footer className="footer p-10 bg-neutral text-neutral-content mt-auto">
-      <nav>
+    <footer className="footer p-10 bg-[#946659] text-neutral-content mt-auto">
+      {/* <nav>
         <h6 className="footer-title">Archive</h6>
         <a className="link link-hover">Poetry</a>
         <a className="link link-hover">Music (Sangeet)</a>
@@ -19,7 +19,7 @@ export default function Footer() {
         <a className="link link-hover">Terms of use</a>
         <a className="link link-hover">Privacy policy</a>
         <a className="link link-hover">Copyright Info</a>
-      </nav>
+      </nav> */}
     </footer>
   );
 }

@@ -1,7 +1,6 @@
 import ArchiveLibrary from "@/components/home/ArchiveLibrary";
 import BioSpotlight from "@/components/home/BioSpotlight";
 import FeaturedBooks from "@/components/home/FeaturedBooks";
-import GlobalSearch from "@/components/home/GlobalSearch";
 import Hero from "@/components/home/Hero";
 import InfoGrid from "@/components/home/InfoGrid";
 import MediaSpotlight from "@/components/home/MediaSpotlight";
@@ -17,20 +16,17 @@ export default function Home() {
     <>
       <main>
         <Hero />
-        <section className="container mx-auto px-4 py-12 md:py-20">
-          <GlobalSearch></GlobalSearch>
-          <InfoGrid></InfoGrid>
-          <ArchiveLibrary></ArchiveLibrary>
-          <FeaturedBooks></FeaturedBooks>
-          <PopularSongs></PopularSongs>
-          <BioSpotlight></BioSpotlight>
-          <MediaSpotlight></MediaSpotlight>
-          <UpcomingEvents></UpcomingEvents>
-          <NewsEvents></NewsEvents>
-          <Timeline></Timeline>
-          <SupportSection></SupportSection>
-          <Newsletter></Newsletter>
-        </section>
+        
+        <FeaturedBooks></FeaturedBooks>
+        <PopularSongs></PopularSongs>
+        <BioSpotlight></BioSpotlight>
+        <MediaSpotlight></MediaSpotlight>
+        <UpcomingEvents></UpcomingEvents>
+        <NewsEvents></NewsEvents>
+        <Timeline></Timeline>
+        <SupportSection></SupportSection>
+        <Newsletter></Newsletter>
+        <section className="container mx-auto px-4 py-12 md:py-20"></section>
       </main>
     </>
   );

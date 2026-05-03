@@ -1,7 +1,7 @@
 export default function BioSidebar() {
   return (
     <aside className="lg:w-1/5 order-2 lg:order-1">
-      <div className="lg:sticky lg:top-24 bg-base-200 p-6 rounded-2xl border border-base-300">
+      <div className="lg:sticky lg:top-24 p-6 bg-[#f1f1f3] rounded-2xl border border-base-300">
         <h3 className="font-bold text-lg mb-4 border-b border-base-300 pb-2">
           Quick Links
         </h3>

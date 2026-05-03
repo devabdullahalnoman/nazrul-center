@@ -141,7 +141,7 @@ export default function Navbar() {
   return (
     <nav
       className={`navbar sticky top-0 z-100 px-4 md:px-12 transition-all duration-300 ${
-        isHome && !isScrolled
+        !isScrolled
           ? "bg-transparent py-4 text-gray-800"
           : "bg-white shadow-md py-4 text-gray-800"
       }`}
