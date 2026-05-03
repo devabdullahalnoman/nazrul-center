@@ -1,15 +1,9 @@
 export const mediaData = {
   videos: [
     {
-      id: 1,
-      title: "Nazrul's Musical Legacy",
-      youtubeId: "dQw4w9WgXcQ",
-      duration: "12:45",
-    },
-    {
       id: 2,
       title: "The Rebel Spirit Documentary",
-      youtubeId: "dQw4w9WgXcQ",
+      youtubeId: "Fy6LJAT2hkI?si=H0Tsz0-WGR9oOn1X",
       duration: "08:20",
     },
   ],

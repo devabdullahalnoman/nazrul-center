@@ -32,7 +32,7 @@ export default function RootLayout({ children }) {
         </header>
 
         <QueryProvider>
-          <main className="grow w-11/12 mx-auto">{children}</main>
+          <main className="grow w-full mx-auto">{children}</main>
         </QueryProvider>
 
         <Footer />
