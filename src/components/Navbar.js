@@ -10,8 +10,8 @@ import { useAuth } from "@/hooks/useAuth";
 const brandColor = "#946659";
 const commonFontSize = "text-[15px]";
 const commonWeight = "font-semibold";
-const activeLink = "text-[#be123c]";
-const linkStyle = `transition-all duration-200 ${commonWeight} px-3 ${commonFontSize} hover:text-[#be123c]`;
+const activeLink = "text-primary";
+const linkStyle = `transition-all duration-200 ${commonWeight} px-3 ${commonFontSize} hover:text-primary`;
 
 // --- SHARED NAVIGATION LINKS ---
 const NavItems = ({ isMobile = false, pathname, onClose }) => {
@@ -69,7 +69,7 @@ const NavItems = ({ isMobile = false, pathname, onClose }) => {
             <li>
               <Link
                 href="/media"
-                className={`hover:text-[#be123c] py-2 ${commonFontSize} ${commonWeight} ${pathname === "/media" ? activeLink : ""}`}
+                className={`hover:text-primary py-2 ${commonFontSize} ${commonWeight} ${pathname === "/media" ? activeLink : ""}`}
               >
                 Media
               </Link>
@@ -77,7 +77,7 @@ const NavItems = ({ isMobile = false, pathname, onClose }) => {
             <li>
               <Link
                 href="/news"
-                className={`hover:text-[#be123c] py-2 ${commonFontSize} ${commonWeight} ${pathname === "/news" ? activeLink : ""}`}
+                className={`hover:text-primary py-2 ${commonFontSize} ${commonWeight} ${pathname === "/news" ? activeLink : ""}`}
               >
                 News
               </Link>
@@ -204,7 +204,7 @@ export default function Navbar() {
         </div>
 
         <Link href="/" className="flex items-center ml-2">
-          <div className="bg-white p-1 rounded shadow-sm">
+          <div className="p-1 rounded shadow-sm">
             <Image
               src="/logo.png"
               alt="Logo"

@@ -4,7 +4,7 @@ import BioContent from "../../components/biography/BioContent";
 
 export default function BiographyPage() {
   return (
-    <div className="bg-[#F7E8E3] min-h-screen">
+    <div className="bg-white min-h-screen">
       {/* Header Section */}
       <div className="bg-[#D9C7AD] text-[#58161F] py-16 px-4">
         <div className="container mx-auto max-w-7xl">
@@ -28,8 +28,8 @@ export default function BiographyPage() {
             <div className="lg:sticky lg:top-24">
               <div className="rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
                 <Image
-                  src="https://placehold.co/400x500/1e3a8a/white?text=Nazrul+Portrait"
-                  alt="Kazi Nazrul Islam Portrait"
+                  src="/nazrul_portrait.jpg"
+                  alt="Portrait of Kazi Nazrul Islam"
                   width={600}
                   height={800}
                   className="w-full h-auto object-cover"
