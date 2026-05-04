@@ -1,156 +1,105 @@
-"use client"; // This is now a Client Component for interactivity
+"use client";
 
 import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-
-const featuredBooks = [
-  {
-    id: 1,
-    title: "Agnibeena",
-    category: "Poetry",
-    img: "https://placehold.co/400x600/1e3a8a/white?text=Agnibeena",
-  },
-  {
-    id: 2,
-    title: "Bisher Bashi",
-    category: "Poetry",
-    img: "https://placehold.co/400x600/1e3a8a/white?text=Bisher+Bashi",
-  },
-  {
-    id: 3,
-    title: "Bandhan Hara",
-    category: "Novel",
-    img: "https://placehold.co/400x600/1e3a8a/white?text=Bandhan+Hara",
-  },
-  {
-    id: 4,
-    title: "Rikter Bedan",
-    category: "Short Story",
-    img: "https://placehold.co/400x600/1e3a8a/white?text=Rikter+Bedan",
-  },
-  {
-    id: 5,
-    title: "Bulbul",
-    category: "Songs",
-    img: "https://placehold.co/400x600/1e3a8a/white?text=Bulbul",
-  },
-];
+import { useFeaturedBooks } from "@/hooks/useFeatured";
 
 export default function FeaturedBooks() {
-  // 1. Create a reference to the scrollable div
+  const { data: books, isLoading, isError } = useFeaturedBooks();
   const scrollRef = useRef(null);
 
-  // 2. Function to handle the scrolling logic
   const scroll = (direction) => {
     if (scrollRef.current) {
-      const { current } = scrollRef;
-      const scrollAmount = 300; // Adjust this based on card width
-      if (direction === "left") {
-        current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
-      } else {
-        current.scrollBy({ left: scrollAmount, behavior: "smooth" });
-      }
+      const scrollAmount = 380;
+      scrollRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
     }
   };
 
+  if (isLoading)
+    return <div className="py-24 text-center animate-pulse">Loading...</div>;
+
+  // Debug check: If this message shows up, the API is returning an empty array.
+  if (!books || books.length === 0) {
+    console.warn("No books found with is_featured = true");
+    return null;
+  }
+
   return (
-    <section className="py-16 px-4">
-      <div className="container mx-auto relative">
-        <div className="flex justify-between items-end mb-8">
+    <section className="py-24 bg-white overflow-hidden">
+      <div className="container mx-auto px-6 relative">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
           <div>
-            <h2 className="text-3xl font-bold">Featured Books</h2>
-            <div className="divider w-24 divider-primary"></div>
-            <p className="text-gray-600 mt-2">
-              Explore masterpieces by the Rebel Poet
-            </p>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">
+              Featured Books
+            </h2>
+            <div className="h-1.5 w-20 bg-[#be123c] mt-6 rounded-full"></div>
           </div>
-          <Link href="/books" className="btn btn-ghost hidden sm:flex">
-            View All →
+          <Link
+            href="/publications"
+            className="group font-bold text-gray-900 flex items-center gap-2 hover:text-[#be123c]"
+          >
+            View All Library{" "}
+            <span className="transition-transform group-hover:translate-x-2">
+              →
+            </span>
           </Link>
         </div>
 
-        {/* 3. Attach the ref to this div */}
         <div
           ref={scrollRef}
-          className="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory hide-scrollbar"
+          className="flex overflow-x-auto gap-8 pb-10 snap-x snap-mandatory hide-scrollbar"
         >
-          {featuredBooks.map((book) => (
+          {books.map((book) => (
             <div
               key={book.id}
-              className="card bg-base-100 shadow-xl min-w-62.5 md:min-w-75 snap-center shrink-0 border border-base-200"
+              className="group min-w-[300px] md:min-w-[340px] snap-center shrink-0"
             >
-              <figure className="relative h-64 w-full bg-base-200">
-                <Image
-                  src={book.img}
-                  alt={book.title}
-                  fill
-                  sizes="(max-width: 768px) 250px, 300px"
-                  className="object-cover"
-                />
-              </figure>
-              <div className="card-body p-5">
-                <div className="badge badge-primary badge-outline">
-                  {book.category}
+              <div className="bg-[#fcfaf9] rounded-3xl overflow-hidden border border-gray-100 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
+                <div className="relative h-[460px] w-full overflow-hidden bg-gray-200">
+                  {book.cover_url ? (
+                    <Image
+                      src={book.cover_url}
+                      alt={book.title}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center h-full text-gray-400">
+                      No Cover
+                    </div>
+                  )}
+                  <div className="absolute top-5 left-5 bg-white/90 backdrop-blur-md px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest text-gray-800">
+                    {book.category}
+                  </div>
                 </div>
-                <h3 className="card-title text-lg mt-1">{book.title}</h3>
-                <div className="card-actions justify-end mt-4">
-                  <button className="btn btn-primary btn-sm">Read More</button>
+
+                <div className="p-8">
+                  <h3 className="text-2xl font-bold text-gray-900 line-clamp-1">
+                    {book.title}
+                  </h3>
+                  <p className="text-gray-400 text-xs mt-2 uppercase font-bold tracking-widest">
+                    Pub. Year: {book.year}
+                  </p>
+
+                  <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-100">
+                    <span className="text-sm font-semibold text-gray-500 uppercase">
+                      Kazi Nazrul Islam
+                    </span>
+                    <Link
+                      href={`/publications/${book.id}`}
+                      className="bg-gray-900 text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-[#be123c] transition-all"
+                    >
+                      Read More
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
           ))}
-        </div>
-
-        {/* 4. Floating Arrows at the bottom */}
-        <div className="flex justify-center gap-4 mt-8">
-          <button
-            onClick={() => scroll("left")}
-            className="btn btn-circle btn-outline btn-primary shadow-md hover:scale-110 transition-transform flex items-center justify-center"
-            aria-label="Scroll Left"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 19.5L8.25 12l7.5-7.5"
-              />
-            </svg>
-          </button>
-
-          <button
-            onClick={() => scroll("right")}
-            className="btn btn-circle btn-outline btn-primary shadow-md hover:scale-110 transition-transform flex items-center justify-center"
-            aria-label="Scroll Right"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M8.25 4.5l7.5 7.5-7.5 7.5"
-              />
-            </svg>
-          </button>
-        </div>
-
-        <div className="text-center mt-8 sm:hidden">
-          <Link href="/books" className="btn btn-outline btn-wide">
-            View All Books
-          </Link>
         </div>
       </div>
     </section>

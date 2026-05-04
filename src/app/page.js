@@ -1,8 +1,6 @@
-import ArchiveLibrary from "@/components/home/ArchiveLibrary";
 import BioSpotlight from "@/components/home/BioSpotlight";
 import FeaturedBooks from "@/components/home/FeaturedBooks";
 import Hero from "@/components/home/Hero";
-import InfoGrid from "@/components/home/InfoGrid";
 import MediaSpotlight from "@/components/home/MediaSpotlight";
 import NewsEvents from "@/components/home/NewsEvents";
 import Newsletter from "@/components/home/Newsletter";
@@ -16,7 +14,6 @@ export default function Home() {
     <>
       <main>
         <Hero />
-        
         <FeaturedBooks></FeaturedBooks>
         <PopularSongs></PopularSongs>
         <BioSpotlight></BioSpotlight>
@@ -26,7 +23,6 @@ export default function Home() {
         <Timeline></Timeline>
         <SupportSection></SupportSection>
         <Newsletter></Newsletter>
-        <section className="container mx-auto px-4 py-12 md:py-20"></section>
       </main>
     </>
   );
