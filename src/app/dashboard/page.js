@@ -1,29 +1,19 @@
-import { createClient } from "@/lib/supabase/server";
+"use client";
+import { useAuth } from "@/hooks/useAuth";
+import AdminView from "@/components/dashboard/admin/AdminView";
+import ContributorView from "@/components/dashboard/contributor/ContributorView";
+import UserView from "@/components/dashboard/user/UserView";
 
-export default async function Dashboard() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+export default function DashboardPage() {
+  const { user } = useAuth();
+  if (!user) return null;
 
-  // Optional: Get user profile details
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("full_name, role")
-    .eq("id", user?.id)
-    .single();
-
-  return (
-    <div className="p-10">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
-      <p className="text-lg mt-4">
-        Welcome back,{" "}
-        <span className="font-bold text-primary">
-          {profile?.full_name || user?.email}
-        </span>
-        !
-      </p>
-      <div className="badge badge-outline mt-2">{profile?.role || "User"}</div>
-    </div>
-  );
+  switch (user.role) {
+    case "admin":
+      return <AdminView user={user} />;
+    case "contributor":
+      return <ContributorView user={user} />;
+    default:
+      return <UserView user={user} />;
+  }
 }

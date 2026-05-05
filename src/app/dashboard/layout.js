@@ -1,49 +1,32 @@
-import { createClient } from "@/lib/supabase/server";
+"use client";
+import { useAuth } from "@/hooks/useAuth";
 import Sidebar from "@/components/dashboard/Sidebar";
-import { redirect } from "next/navigation";
+import { usePathname } from "next/navigation";
 
-export default async function DashboardLayout({ children }) {
-  // 1. Initialize the Server-side Supabase client
-  const supabase = await createClient();
+export default function DashboardLayout({ children }) {
+  const { user, loading } = useAuth();
+  const pathname = usePathname();
 
-  // 2. Get the authenticated user
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  // 3. Security: If the Proxy somehow missed them, redirect to login
-  if (!user) {
-    redirect("/login");
+  // ONLY show loading on the very first visit.
+  // Once the user is in state, don't show it during navigation.
+  if (loading && !user) {
+    return (
+      <div className="h-screen flex flex-col items-center justify-center bg-[#FDFCFB]">
+        <div className="w-12 h-12 border-4 border-[#946659]/20 border-t-[#946659] rounded-full animate-spin mb-4"></div>
+        <p className="font-serif italic text-[#946659]">Authenticating...</p>
+      </div>
+    );
   }
 
-  // 4. Fetch the profile to get the 'role' (admin, operator, or user)
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role, full_name")
-    .eq("id", user.id)
-    .single();
+  if (!user) return null; // Redirect logic usually handled in useAuth
 
   return (
-    <div className="flex min-h-screen bg-base-100">
-      {/* Pass the role to the Sidebar so it knows which links to show.
-          If the profile fails to load, we default to 'user' 
-      */}
-      <Sidebar
-        role={profile?.role || "user"}
-        userName={profile?.full_name || user.email}
-      />
+    <div className="flex bg-[#FDFCFB] min-h-screen">
+      {/* Sidebar is outside the 'children', so it NEVER reloads */}
+      <Sidebar user={user} />
 
-      <main className="flex-1 bg-base-200">
-        {/* Header/Navbar could go here */}
-        <header className="bg-white border-b p-4 flex justify-between items-center">
-          <h1 className="font-semibold text-gray-700 uppercase tracking-widest text-sm">
-            {profile?.role} Panel
-          </h1>
-          <div className="text-sm text-gray-500">{user.email}</div>
-        </header>
-
-        <div className="p-8">
-          {/* This is where your page.js content will appear */}
+      <main className="flex-1 ml-64 p-8 lg:p-12">
+        <div className="max-w-7xl mx-auto transition-all duration-300">
           {children}
         </div>
       </main>

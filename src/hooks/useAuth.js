@@ -1,31 +1,40 @@
-import { useState, useEffect } from "react";
-import { createClient } from "@/lib/supabase/client";
+"use client";
+import { useState, useEffect, useRef } from "react";
 import { authService } from "@/lib/supabase/auth-service";
+import { createClient } from "@/lib/supabase/client";
 
 export function useAuth() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const supabase = createClient();
+  const isInitialMount = useRef(true);
+
+  const fetchUserData = async () => {
+    setLoading(true);
+    const data = await authService.getCurrentUser();
+    setUser(data);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    // Check current user status on mount
-    authService.getCurrentUser().then((user) => {
-      setUser(user);
-      setLoading(false);
-    });
+    if (isInitialMount.current) {
+      fetchUserData();
+      isInitialMount.current = false;
+    }
 
-    // Listen for real-time auth events (Login, Logout, Token Refresh)
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user || null);
-      setLoading(false);
+    } = supabase.auth.onAuthStateChange(async (event) => {
+      if (["SIGNED_IN", "TOKEN_REFRESHED", "USER_UPDATED"].includes(event)) {
+        await fetchUserData();
+      } else if (event === "SIGNED_OUT") {
+        setUser(null);
+        setLoading(false);
+      }
     });
 
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [supabase.auth]);
+    return () => subscription.unsubscribe();
+  }, []);
 
-  return { user, loading };
+  return { user, loading, refreshUser: fetchUserData };
 }

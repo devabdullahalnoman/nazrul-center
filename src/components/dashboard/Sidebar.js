@@ -1,71 +1,58 @@
 "use client";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client"; // Updated import
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { authService } from "@/lib/supabase/auth-service";
 
-export default function Sidebar({ role, userName }) {
-  const router = useRouter();
-  const supabase = createClient(); // Initialize the modular client
+export default function Sidebar({ user }) {
+  const pathname = usePathname();
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    // Use window.location for logout to completely clear the
-    // server-side session cookies in Next.js 16
-    window.location.href = "/login";
-  };
-
-  // Define links for each role
-  const menuItems = {
-    admin: [
-      { name: "Admin Home", href: "/dashboard" },
-      { name: "All Orders", href: "/dashboard/admin-orders" },
-      { name: "Manage Users", href: "/dashboard/manage-users" },
-      { name: "Complaints", href: "/dashboard/complaints" },
-    ],
-    operator: [
-      { name: "Order Pool", href: "/dashboard" },
-      { name: "My Active Tasks", href: "/dashboard/my-tasks" },
-    ],
-    user: [
-      { name: "My Orders", href: "/dashboard" },
-      { name: "Wishlist", href: "/dashboard/wishlist" },
-      { name: "Support/Complains", href: "/dashboard/support" },
-    ],
-  };
-
-  const links = menuItems[role] || menuItems.user;
+  const menuItems = [
+    { name: "Command Center", path: "/dashboard", icon: "📊" },
+    { name: "E-Books", path: "/dashboard/publications", icon: "📖" },
+    { name: "Inventory", path: "/dashboard/inventory", icon: "📦" },
+    { name: "Orders", path: "/dashboard/orders", icon: "🛒" },
+    { name: "Wishlist", path: "/dashboard/wishlist-admin", icon: "✨" },
+    { name: "Messages & Complains", path: "/dashboard/messages", icon: "✉️" },
+  ];
 
   return (
-    <div className="w-64 bg-neutral text-neutral-content min-h-screen p-4 flex flex-col">
-      <div className="mb-10 px-2">
-        <h2 className="text-2xl font-bold text-white">Nazrul Center</h2>
-        <p className="text-xs opacity-60 italic">{userName}</p>
+    <aside className="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col shadow-sm">
+      <div className="p-8 border-b border-gray-50">
+        <h2 className="text-[#946659] font-serif text-2xl font-bold tracking-tight">
+          Nazrul Center
+        </h2>
+        <p className="text-[10px] uppercase tracking-widest text-gray-400 font-bold mt-1">
+          Administrator
+        </p>
       </div>
 
-      <ul className="menu w-full p-0 grow">
-        <li className="menu-title text-gray-400 text-xs mb-2">
-          {role?.toUpperCase()} MENU
-        </li>
-        {links.map((item, index) => (
-          <li key={`${item.href}-${index}`}>
+      <nav className="flex-1 p-4 space-y-1">
+        {menuItems.map((item) => {
+          const isActive = pathname === item.path;
+          return (
             <Link
-              href={item.href}
-              className="hover:bg-primary hover:text-white transition-colors"
+              key={item.path}
+              href={item.path}
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
+                isActive
+                  ? "bg-[#946659]/10 text-[#946659] border-l-4 border-[#946659]"
+                  : "text-gray-600 hover:bg-gray-50"
+              }`}
             >
-              {item.name}
+              <span>{item.icon}</span> {item.name}
             </Link>
-          </li>
-        ))}
-      </ul>
+          );
+        })}
+      </nav>
 
-      <div className="border-t border-gray-700 pt-4">
+      <div className="p-6 border-t border-gray-100 bg-gray-50/50">
         <button
-          onClick={handleLogout}
-          className="btn btn-error btn-outline btn-block btn-sm"
+          onClick={() => authService.logout()}
+          className="w-full text-left text-xs font-bold text-red-400 hover:text-red-600 uppercase tracking-widest"
         >
-          Logout
+          Logout System
         </button>
       </div>
-    </div>
+    </aside>
   );
 }
