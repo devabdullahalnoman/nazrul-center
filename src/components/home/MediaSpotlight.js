@@ -10,11 +10,11 @@ export default function MediaSpotlight() {
           <h2 className="text-4xl md:text-5xl font-black text-gray-900 leading-tight">
             Biography of Nazrul
           </h2>
-          <div className="h-1.5 w-20 bg-[#be123c] mt-4 rounded-full"></div>
+          <div className="h-1.5 w-20 bg-primary mt-4 rounded-full"></div>
         </div>
 
         {/* Bigger Video Player Section */}
-        <div className="flex flex-col lg:flex-row gap-12 items-start">
+        <div className="flex flex-col justify-center items-center gap-12">
           {/* Video Player - Left (or Top on Mobile) */}
           <div className="w-full lg:w-3/4">
             <div className="relative aspect-video w-full rounded-3xl overflow-hidden shadow-2xl bg-black group">
@@ -32,7 +32,7 @@ export default function MediaSpotlight() {
           </div>
 
           {/* Context/Description Side - Right (or Bottom on Mobile) */}
-          <div className="w-full lg:w-1/4 space-y-6">
+          <div className="w-full space-y-6 flex flex-col justify-center items-center lg:w-3/4">
             <div className="space-y-4">
               <p className="text-xl text-gray-600 italic font-medium leading-relaxed border-l-4 border-gray-200 pl-4">
                 &quot;I am the rebel poet, I am the heart of the world.&quot;

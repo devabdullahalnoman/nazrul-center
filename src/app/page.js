@@ -16,9 +16,9 @@ export default function Home() {
       <main>
         <Hero />
         <FeaturedBooks></FeaturedBooks>
+        <MediaSpotlight></MediaSpotlight>
         <PopularSongs></PopularSongs>
         <BioSpotlight></BioSpotlight>
-        <MediaSpotlight></MediaSpotlight>
         <Publications></Publications>
         <UpcomingEvents></UpcomingEvents>
         <NewsEvents></NewsEvents>
