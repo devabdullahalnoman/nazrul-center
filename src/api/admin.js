@@ -98,7 +98,8 @@ export const adminApi = {
     }
   },
 
-  async getRecentOrders(limit = 10) {
+  async getRecentOrders(limit = 50) {
+    // Increased limit for better search/pagination
     const { data, error } = await supabase
       .from("orders")
       .select(
