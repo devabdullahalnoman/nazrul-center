@@ -1,276 +1,283 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { useState } from "react";
+import Image from "next/image";
+import { useAdminPublications } from "@/hooks/useAdminPublications";
+import { adminPublicationsApi } from "@/api/admin-publications";
+import PublicationTable from "@/components/dashboard/admin/PublicationTable";
 
 export default function PublicationsPage() {
-  const supabase = createClient();
+  const { publications, loading } = useAdminPublications();
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState("ADD");
 
-  // State
-  const [books, setBooks] = useState([]);
-  const [filter, setFilter] = useState("All");
-  const [isDataLoading, setIsDataLoading] = useState(true);
-  const [form, setForm] = useState({
-    title: "",
-    category: "Books by Nazrul",
-    author: "",
-    file_url: "",
-    is_featured: false,
-  });
+  const handleOpenAdd = () => {
+    setSelectedItem({
+      title: "",
+      author: "Kazi Nazrul Islam",
+      category: "Books by Nazrul",
+      year: new Date().getFullYear(),
+      description: "",
+      cover_url: "",
+      file_url: "",
+      is_featured: false,
+    });
+    setModalMode("ADD");
+    setIsModalOpen(true);
+  };
 
-  // --- 1. FUNCTIONS FIRST (To avoid "Accessed before declaration") ---
-
-  const fetchBooks = useCallback(async () => {
-    try {
-      const { data, error } = await supabase
-        .from("publications")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
-      setBooks(data || []);
-    } catch (err) {
-      console.error("Error fetching publications:", err.message);
-    } finally {
-      setIsDataLoading(false);
-    }
-  }, [supabase]);
-
-  const handleAddBook = async (e) => {
+  const handleAction = async (e) => {
     e.preventDefault();
-
-    // REQUIREMENT: Auto-author logic for Nazrul
-    let finalAuthor = form.author;
-    if (
-      form.category === "Books by Nazrul" &&
-      (!form.author || form.author.trim() === "")
-    ) {
-      finalAuthor = "Kazi Nazrul Islam";
-    }
-
-    const { error } = await supabase.from("publications").insert([
-      {
-        ...form,
-        author: finalAuthor,
-      },
-    ]);
-
-    if (!error) {
-      setForm({
-        title: "",
-        category: "Books by Nazrul",
-        author: "",
-        file_url: "",
-        is_featured: false,
-      });
-      // We don't need to manually re-fetch here because the Realtime listener below will handle it!
-    } else {
-      alert(error.message);
+    try {
+      if (modalMode === "ADD")
+        await adminPublicationsApi.addPublication(selectedItem);
+      else
+        await adminPublicationsApi.updatePublication(
+          selectedItem.id,
+          selectedItem,
+        );
+      setIsModalOpen(false);
+    } catch (err) {
+      alert(err.message);
     }
   };
 
-  // --- 2. USEEFFECT LATER ---
-
-  useEffect(() => {
-    let isMounted = true;
-
-    const initializeData = async () => {
-      // Initial fetch
-      await fetchBooks();
-
-      // REAL-TIME SUBSCRIPTION: Updates UI across all devices instantly
-      if (isMounted) {
-        const channel = supabase
-          .channel("realtime-publications")
-          .on(
-            "postgres_changes",
-            { event: "*", schema: "public", table: "publications" },
-            () => {
-              if (isMounted) {
-                fetchBooks(); // Re-syncs the list whenever ANY device makes a change
-              }
-            },
-          )
-          .subscribe();
-
-        return () => {
-          isMounted = false;
-          supabase.removeChannel(channel);
-        };
-      }
-    };
-
-    const cleanup = initializeData();
-
-    return () => {
-      isMounted = false;
-      cleanup?.then((fn) => fn?.());
-    };
-  }, [fetchBooks, supabase]);
-
-  // --- 3. RENDER LOGIC ---
-
-  const filteredBooks =
-    filter === "All" ? books : books.filter((b) => b.category === filter);
+  if (loading)
+    return (
+      <div className="p-20 font-serif italic text-[#946659]">
+        Syncing E-Book Archive...
+      </div>
+    );
 
   return (
-    <div className="space-y-10 animate-in fade-in duration-700">
-      <header className="border-b border-gray-100 pb-6">
-        <h1 className="text-4xl font-serif font-bold text-gray-900">
-          Digital Publications
-        </h1>
-        <p className="text-[#946659] font-medium italic mt-1">
-          E-Book Archive & Research Management
-        </p>
+    <div className="p-10 space-y-10 animate-in fade-in duration-500">
+      <header className="flex justify-between items-end pb-8 border-b border-gray-100">
+        <div>
+          <h1 className="text-4xl font-serif font-bold text-gray-900 leading-tight">
+            Digital Publications
+          </h1>
+          <p className="text-[#946659] italic font-medium">
+            Archive & Research Oversight
+          </p>
+        </div>
+        <button
+          onClick={handleOpenAdd}
+          className="bg-[#946659] text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-[#946659]/20 transition-transform hover:scale-105"
+        >
+          + Add New E-Book
+        </button>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-        {/* ADD PANEL */}
-        <div className="lg:col-span-1">
-          <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm sticky top-10">
-            <h3 className="text-xl font-serif font-bold mb-6 text-gray-800">
-              Register E-Book
-            </h3>
-            <form onSubmit={handleAddBook} className="space-y-4">
-              <div className="space-y-1">
-                <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">
-                  Category
-                </label>
-                <select
-                  className="w-full p-3 bg-gray-50 border-none rounded-xl text-sm font-bold focus:ring-2 focus:ring-[#946659]/20 transition-all"
-                  value={form.category}
-                  onChange={(e) =>
-                    setForm({ ...form, category: e.target.value })
-                  }
+      <PublicationTable
+        data={publications}
+        onAction={(item) => {
+          setSelectedItem(item);
+          setModalMode("EDIT");
+          setIsModalOpen(true);
+        }}
+      />
+
+      {/* COMPREHENSIVE DETAIL & EDIT MODAL */}
+      {isModalOpen && selectedItem && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-6">
+          <div className="bg-white w-full max-w-5xl rounded-[40px] p-12 shadow-2xl overflow-y-auto max-h-[95vh] relative animate-in zoom-in duration-300">
+            <form onSubmit={handleAction} className="space-y-8">
+              <div className="flex justify-between items-center border-b border-gray-50 pb-6">
+                <h2 className="text-3xl font-serif font-bold text-gray-900">
+                  {modalMode === "ADD" ? "Register E-Book" : "Archive Details"}
+                </h2>
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="text-gray-300 hover:text-black text-2xl"
                 >
-                  <option>Books by Nazrul</option>
-                  <option>Books on Nazrul</option>
-                  <option>Research Papers</option>
-                </select>
+                  ✕
+                </button>
               </div>
 
-              <div className="space-y-1">
-                <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">
-                  Title
-                </label>
-                <input
-                  className="w-full p-3 bg-gray-50 border-none rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-[#946659]/20"
-                  placeholder="Enter publication title"
-                  value={form.title}
-                  required
-                  onChange={(e) => setForm({ ...form, title: e.target.value })}
-                />
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+                {/* PHOTO & URLS COLUMN */}
+                <div className="md:col-span-1 space-y-6">
+                  <div className="relative aspect-[3/4] bg-gray-50 rounded-3xl overflow-hidden border border-gray-100 shadow-inner flex items-center justify-center">
+                    {selectedItem.cover_url ? (
+                      <Image
+                        src={selectedItem.cover_url}
+                        alt="Cover Preview"
+                        fill
+                        className="object-cover"
+                      />
+                    ) : (
+                      <span className="text-[10px] font-black uppercase text-gray-300">
+                        No Preview Available
+                      </span>
+                    )}
+                  </div>
+                  <div className="space-y-4">
+                    <div className="space-y-1">
+                      <label className="text-[9px] font-black uppercase text-gray-400 tracking-widest">
+                        Cover Image URL
+                      </label>
+                      <input
+                        className="w-full p-3 bg-gray-50 rounded-xl text-[10px] font-bold outline-none border border-gray-100"
+                        value={selectedItem.cover_url || ""}
+                        onChange={(e) =>
+                          setSelectedItem({
+                            ...selectedItem,
+                            cover_url: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[9px] font-black uppercase text-gray-400 tracking-widest">
+                        PDF/File URL
+                      </label>
+                      <input
+                        className="w-full p-3 bg-gray-50 rounded-xl text-[10px] font-bold outline-none border border-gray-100"
+                        value={selectedItem.file_url || ""}
+                        onChange={(e) =>
+                          setSelectedItem({
+                            ...selectedItem,
+                            file_url: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* FIELDS COLUMN */}
+                <div className="md:col-span-3 grid grid-cols-2 gap-6">
+                  <div className="col-span-2 space-y-1">
+                    <label className="text-[10px] font-black uppercase text-gray-400">
+                      Title
+                    </label>
+                    <input
+                      className="w-full p-4 bg-gray-50 rounded-2xl font-bold border-none outline-none focus:ring-1 ring-[#946659]"
+                      value={selectedItem.title || ""}
+                      required
+                      onChange={(e) =>
+                        setSelectedItem({
+                          ...selectedItem,
+                          title: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-black uppercase text-gray-400">
+                      Author
+                    </label>
+                    <input
+                      className="w-full p-4 bg-gray-50 rounded-2xl outline-none"
+                      value={selectedItem.author || ""}
+                      onChange={(e) =>
+                        setSelectedItem({
+                          ...selectedItem,
+                          author: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-black uppercase text-gray-400">
+                      Category
+                    </label>
+                    <select
+                      className="w-full p-4 bg-gray-50 rounded-2xl font-bold outline-none appearance-none"
+                      value={selectedItem.category || "Books by Nazrul"}
+                      onChange={(e) =>
+                        setSelectedItem({
+                          ...selectedItem,
+                          category: e.target.value,
+                        })
+                      }
+                    >
+                      <option>Books by Nazrul</option>
+                      <option>Books on Nazrul</option>
+                      <option>Research Papers</option>
+                      <option>Songs</option>
+                    </select>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-black uppercase text-gray-400">
+                      Year
+                    </label>
+                    <input
+                      type="number"
+                      className="w-full p-4 bg-gray-50 rounded-2xl outline-none font-mono"
+                      value={selectedItem.year || ""}
+                      onChange={(e) =>
+                        setSelectedItem({
+                          ...selectedItem,
+                          year: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="flex items-center gap-4 pt-6">
+                    <input
+                      type="checkbox"
+                      checked={selectedItem.is_featured || false}
+                      className="w-5 h-5 accent-[#946659] rounded-md"
+                      onChange={(e) =>
+                        setSelectedItem({
+                          ...selectedItem,
+                          is_featured: e.target.checked,
+                        })
+                      }
+                    />
+                    <label className="text-[10px] font-black uppercase text-gray-500">
+                      Feature on Homepage
+                    </label>
+                  </div>
+                  <div className="col-span-2 space-y-1">
+                    <label className="text-[10px] font-black uppercase text-gray-400">
+                      Description
+                    </label>
+                    <textarea
+                      rows={4}
+                      className="w-full p-4 bg-gray-50 rounded-2xl outline-none text-sm leading-relaxed"
+                      value={selectedItem.description || ""}
+                      onChange={(e) =>
+                        setSelectedItem({
+                          ...selectedItem,
+                          description: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                </div>
               </div>
 
-              <div className="space-y-1">
-                <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">
-                  Author
-                </label>
-                <input
-                  className="w-full p-3 bg-gray-50 border-none rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-[#946659]/20"
-                  placeholder="Auto-fills if left blank"
-                  value={form.author}
-                  onChange={(e) => setForm({ ...form, author: e.target.value })}
-                />
+              <div className="flex gap-4 pt-8 border-t border-gray-50">
+                <button
+                  type="submit"
+                  className="flex-1 py-5 bg-black text-white rounded-3xl font-black uppercase text-[10px] tracking-widest hover:bg-[#946659] transition-all"
+                >
+                  {modalMode === "ADD" ? "Save to Archive" : "Edit Record"}
+                </button>
+                {modalMode === "EDIT" && (
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      if (confirm("Permanently delete this record?")) {
+                        await adminPublicationsApi.deletePublication(
+                          selectedItem.id,
+                        );
+                        setIsModalOpen(false);
+                      }
+                    }}
+                    className="px-12 py-5 bg-red-50 text-red-500 rounded-3xl font-black uppercase text-[10px] tracking-widest hover:bg-red-500 hover:text-white transition-all"
+                  >
+                    Delete
+                  </button>
+                )}
               </div>
-
-              <div className="flex items-center gap-3 py-2">
-                <input
-                  type="checkbox"
-                  className="w-4 h-4 accent-[#946659]"
-                  checked={form.is_featured}
-                  onChange={(e) =>
-                    setForm({ ...form, is_featured: e.target.checked })
-                  }
-                />
-                <span className="text-[10px] font-black uppercase text-gray-500">
-                  Feature on Homepage
-                </span>
-              </div>
-
-              <button className="w-full py-4 bg-black text-white rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-[#946659] transition-all shadow-lg shadow-black/5">
-                Update Database
-              </button>
             </form>
           </div>
         </div>
-
-        {/* LIST PANEL */}
-        <div className="lg:col-span-2 space-y-6">
-          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-            {[
-              "All",
-              "Books by Nazrul",
-              "Books on Nazrul",
-              "Research Papers",
-            ].map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setFilter(cat)}
-                className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${filter === cat ? "bg-[#946659] text-white shadow-md" : "bg-white text-gray-400 border border-gray-100"}`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          <div className="bg-white rounded-[32px] border border-gray-100 shadow-sm overflow-hidden">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-gray-50/50 border-b border-gray-50 text-[10px] font-black uppercase text-gray-400">
-                <tr>
-                  <th className="px-6 py-4">Publication Details</th>
-                  <th className="px-6 py-4 text-center">E-Book Status</th>
-                  <th className="px-6 py-4 text-right">Management</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {filteredBooks.map((book) => (
-                  <tr
-                    key={book.id}
-                    className="hover:bg-gray-50/30 transition-colors"
-                  >
-                    <td className="px-6 py-5">
-                      <p className="font-bold text-gray-800 leading-tight">
-                        {book.title}
-                      </p>
-                      <p className="text-xs text-[#946659] italic mt-1">
-                        {book.author}
-                      </p>
-                    </td>
-                    <td className="px-6 py-5 text-center">
-                      {book.file_url ? (
-                        <span className="px-3 py-1 bg-green-50 text-green-600 rounded-full text-[9px] font-black uppercase tracking-tighter">
-                          Read Button Enabled
-                        </span>
-                      ) : (
-                        <span className="text-[9px] text-gray-300 font-bold uppercase tracking-tighter italic">
-                          Offline Only
-                        </span>
-                      )}
-                    </td>
-                    <td className="px-6 py-5 text-right">
-                      <div className="flex justify-end gap-4">
-                        <button className="text-[10px] font-black text-blue-400 uppercase hover:text-blue-600">
-                          Edit
-                        </button>
-                        <button className="text-[10px] font-black text-red-300 uppercase hover:text-red-500">
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {filteredBooks.length === 0 && !isDataLoading && (
-              <div className="p-20 text-center">
-                <p className="text-gray-300 italic font-serif">
-                  No publications found in this category.
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
