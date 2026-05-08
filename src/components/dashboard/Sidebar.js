@@ -10,8 +10,7 @@ export default function Sidebar({ user }) {
     { name: "Command Center", path: "/dashboard", icon: "📊" },
     { name: "E-Books", path: "/dashboard/publications", icon: "📖" },
     { name: "Inventory", path: "/dashboard/inventory", icon: "📦" },
-    { name: "Orders", path: "/dashboard/orders", icon: "🛒" },
-    { name: "Wishlist", path: "/dashboard/wishlist-admin", icon: "✨" },
+    { name: "Users", path: "/dashboard/users", icon: "👥" },
     { name: "Messages & Complains", path: "/dashboard/messages", icon: "✉️" },
   ];
 

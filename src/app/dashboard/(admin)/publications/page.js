@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useMemo } from "react"; // Added useMemo for efficient filtering
 import Image from "next/image";
 import { useAdminPublications } from "@/hooks/useAdminPublications";
 import { adminPublicationsApi } from "@/api/admin-publications";
@@ -10,6 +10,38 @@ export default function PublicationsPage() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState("ADD");
+
+  // --- NEW STATE FOR SEARCH, FILTER, AND PAGINATION ---
+  const [searchQuery, setSearchQuery] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+
+  const categories = [
+    "All",
+    "Books by Nazrul",
+    "Books on Nazrul",
+    "Research Papers",
+  ];
+
+  // --- FILTERING LOGIC ---
+  const filteredPublications = useMemo(() => {
+    return publications.filter((pub) => {
+      const matchesSearch =
+        pub.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        pub.author?.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesCategory =
+        categoryFilter === "All" || pub.category === categoryFilter;
+      return matchesSearch && matchesCategory;
+    });
+  }, [publications, searchQuery, categoryFilter]);
+
+  // --- PAGINATION LOGIC ---
+  const totalPages = Math.ceil(filteredPublications.length / itemsPerPage) || 1;
+  const paginatedData = filteredPublications.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage,
+  );
 
   const handleOpenAdd = () => {
     setSelectedItem({
@@ -50,7 +82,7 @@ export default function PublicationsPage() {
     );
 
   return (
-    <div className="p-10 space-y-10 animate-in fade-in duration-500">
+    <div className="p-10 space-y-10">
       <header className="flex justify-between items-end pb-8 border-b border-gray-100">
         <div>
           <h1 className="text-4xl font-serif font-bold text-gray-900 leading-tight">
@@ -68,8 +100,40 @@ export default function PublicationsPage() {
         </button>
       </header>
 
+      {/* --- NEW FILTER & SEARCH SECTION --- */}
+      <div className="flex flex-col md:flex-row gap-6 justify-between items-center">
+        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => {
+                setCategoryFilter(cat);
+                setCurrentPage(1); // Reset to page 1 on filter change
+              }}
+              className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${
+                categoryFilter === cat
+                  ? "bg-black text-white shadow-lg"
+                  : "bg-white text-gray-400 border border-gray-100 hover:bg-gray-50"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+        <input
+          placeholder="Search by title or author..."
+          className="px-6 py-3 bg-white border border-gray-100 rounded-2xl text-sm outline-none focus:ring-1 ring-[#946659] w-full md:w-80 shadow-sm transition-all"
+          value={searchQuery}
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+            setCurrentPage(1); // Reset to page 1 on search
+          }}
+        />
+      </div>
+
+      {/* --- TABLE (NOW USING PAGINATED DATA) --- */}
       <PublicationTable
-        data={publications}
+        data={paginatedData}
         onAction={(item) => {
           setSelectedItem(item);
           setModalMode("EDIT");
@@ -77,7 +141,37 @@ export default function PublicationsPage() {
         }}
       />
 
-      {/* COMPREHENSIVE DETAIL & EDIT MODAL */}
+      {/* --- NEW PAGINATION FOOTER --- */}
+      <div className="px-8 py-5 bg-white border border-gray-100 rounded-[32px] shadow-sm flex flex-col md:flex-row items-center justify-between gap-4 mt-6">
+        <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest">
+          Total Publications:{" "}
+          <span className="text-[#946659]">{filteredPublications.length}</span>
+        </p>
+
+        <div className="flex items-center gap-2">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+            className="px-4 py-2 text-[10px] font-black uppercase bg-white border border-gray-100 rounded-xl disabled:opacity-20 transition-all hover:border-[#946659]"
+          >
+            Prev
+          </button>
+
+          <div className="bg-white border border-gray-100 px-3 py-2 rounded-xl text-[10px] font-bold text-[#946659]">
+            {currentPage} / {totalPages}
+          </div>
+
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+            className="px-4 py-2 text-[10px] font-black uppercase bg-white border border-gray-100 rounded-xl disabled:opacity-20 transition-all hover:border-[#946659]"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+
+      {/* COMPREHENSIVE DETAIL & EDIT MODAL (UNCHANGED) */}
       {isModalOpen && selectedItem && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-6">
           <div className="bg-white w-full max-w-5xl rounded-[40px] p-12 shadow-2xl overflow-y-auto max-h-[95vh] relative animate-in zoom-in duration-300">
@@ -196,7 +290,6 @@ export default function PublicationsPage() {
                       <option>Books by Nazrul</option>
                       <option>Books on Nazrul</option>
                       <option>Research Papers</option>
-                      <option>Songs</option>
                     </select>
                   </div>
                   <div className="space-y-1">

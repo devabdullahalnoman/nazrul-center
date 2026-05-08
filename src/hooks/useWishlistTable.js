@@ -12,6 +12,7 @@ export function useWishlistTable(wishlist = []) {
     return data.filter(
       (w) =>
         w.customer?.full_name?.toLowerCase().includes(query) ||
+        w.customer?.email?.toLowerCase().includes(query) ||
         w.product?.item_name?.toLowerCase().includes(query),
     );
   }, [wishlist, searchQuery]);

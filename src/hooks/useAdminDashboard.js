@@ -1,92 +1,14 @@
-// "use client";
-// import { useState, useEffect, useCallback, useRef } from "react";
-// import { adminApi } from "@/api/admin";
-// import { createClient } from "@/lib/supabase/client";
-
-// export function useAdminDashboard() {
-//   const [stats, setStats] = useState({
-//     contributors: 0,
-//     revenue: 0,
-//     ordersPending: 0,
-//     inventoryCount: 0,
-//     bookCount: 0,
-//     messages: 0,
-//   });
-//   const [orders, setOrders] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const supabase = createClient();
-//   const isMounted = useRef(true);
-
-//   const loadData = useCallback(async () => {
-//     try {
-//       const [s, o] = await Promise.all([
-//         adminApi.getDashboardStats(),
-//         adminApi.getRecentOrders(100), // Fetch more for better search/pagination coverage
-//       ]);
-//       if (isMounted.current) {
-//         setStats(s);
-//         setOrders(o);
-//       }
-//     } catch (err) {
-//       console.error("Hook Sync Failure:", err);
-//     } finally {
-//       if (isMounted.current) setLoading(false);
-//     }
-//   }, []);
-
-//   useEffect(() => {
-//     isMounted.current = true;
-
-//     const initialize = async () => {
-//       await loadData();
-//     };
-//     initialize();
-
-//     const channel = supabase
-//       .channel("dashboard-realtime")
-//       .on(
-//         "postgres_changes",
-//         { event: "*", schema: "public", table: "orders" },
-//         loadData,
-//       )
-//       .on(
-//         "postgres_changes",
-//         { event: "*", schema: "public", table: "inventory" },
-//         loadData,
-//       )
-//       .on(
-//         "postgres_changes",
-//         { event: "*", schema: "public", table: "tickets" },
-//         loadData,
-//       )
-//       .subscribe();
-
-//     return () => {
-//       isMounted.current = false;
-//       supabase.removeChannel(channel);
-//     };
-//   }, [loadData, supabase]);
-
-//   return { stats, orders, loading };
-// }
-
 "use client";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { adminApi } from "@/api/admin";
+import { adminWishlistApi } from "@/api/admin-wishlist";
+import { adminOrdersApi } from "@/api/admin-orders";
+import { adminContributorsApi } from "@/api/admin-contributors"; // New Import
 import { createClient } from "@/lib/supabase/client";
 
 export function useAdminDashboard() {
   const [data, setData] = useState({
-    stats: {
-      contributors: 0,
-      revenue: 0,
-      ordersPending: 0,
-      inventoryCount: 0,
-      bookCount: 0,
-      messages: 0,
-      totalOrders: 0,
-      visitors: "0",
-    },
+    stats: { contributors: 0, revenue: 0, ordersPending: 0, inventoryCount: 0, bookCount: 0, messages: 0, totalOrders: 0, visitors: "0" },
     orders: [],
     contributors: [],
     wishlist: [],
@@ -99,25 +21,25 @@ export function useAdminDashboard() {
     try {
       const [s, o, c, w] = await Promise.all([
         adminApi.getDashboardStats(),
-        adminApi.getRecentOrders(),
-        adminApi.getContributors(),
-        adminApi.getWishlist(),
+        adminOrdersApi.getRecentOrders(),
+        adminContributorsApi.getContributors(), // Updated to specific API
+        adminWishlistApi.getWishlist(),
       ]);
 
       if (isMounted.current) {
         setData({
-          stats: s || data.stats, // Guard against null
+          stats: s || data.stats,
           orders: o || [],
           contributors: c || [],
           wishlist: w || [],
         });
       }
     } catch (err) {
-      console.error("Critical Hook Error:", err);
+      console.error("Dashboard Sync Error:", err);
     } finally {
       if (isMounted.current) setLoading(false);
     }
-  }, []);
+  }, [data.stats]);
 
   useEffect(() => {
     isMounted.current = true;
@@ -126,11 +48,9 @@ export function useAdminDashboard() {
 
     const channel = supabase
       .channel("admin-realtime")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "orders" },
-        loadAllData,
-      )
+      .on("postgres_changes", { event: "*", schema: "public", table: "orders" }, loadAllData)
+      .on("postgres_changes", { event: "*", schema: "public", table: "wishlists" }, loadAllData)
+      .on("postgres_changes", { event: "*", schema: "public", table: "profiles" }, loadAllData)
       .subscribe();
 
     return () => {
