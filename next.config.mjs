@@ -17,6 +17,18 @@ const nextConfig = {
         port: "",
         pathname: "/storage/v1/object/public/**", // Matches all public storage files
       },
+      {
+        protocol: "https",
+        hostname: "ui-avatars.com",
+        port: "",
+        pathname: "/api/**",
+      },
+      {
+        protocol: "https",
+        hostname: "*.supabase.co", // Whitelists your Supabase storage
+        port: "",
+        pathname: "/storage/v1/object/public/**",
+      },
     ],
   },
 };
