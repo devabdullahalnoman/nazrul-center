@@ -39,7 +39,7 @@ export function useAdminDashboard() {
     } finally {
       if (isMounted.current) setLoading(false);
     }
-  }, [data.stats]);
+  }, []);
 
   useEffect(() => {
     isMounted.current = true;
