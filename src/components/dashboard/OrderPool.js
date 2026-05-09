@@ -1,7 +1,7 @@
 "use client";
 import { createClient } from "@/lib/supabase/client";
 import { useOrderTable } from "@/hooks/useOrderTable";
-import { adminOrdersApi } from "@/api/admin-orders";
+import { orderPoolApi } from "@/api/order-pool";
 
 export default function OrderTable({ orders = [] }) {
   const supabase = createClient();
@@ -21,21 +21,20 @@ export default function OrderTable({ orders = [] }) {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) return alert("Please log in.");
 
-      const updated = await adminOrdersApi.updateOrderStatus(
+      const updated = await orderPoolApi.updateOrderStatus(
         id,
         newStatus,
         user.id,
       );
 
-      // If the modal is open for this specific order, update the modal data too
       if (selectedOrder?.id === id) {
         setSelectedOrder(updated);
       }
     } catch (err) {
-      console.error("Status Update Error:", err);
-      alert("Failed to update order status");
+      console.error("Status Update Error:", err.message);
+      alert("Permission Denied: Only staff can change status.");
     }
   };
 
@@ -49,9 +48,11 @@ export default function OrderTable({ orders = [] }) {
 
   return (
     <div className="bg-white rounded-[32px] border border-gray-100 shadow-sm mt-10 overflow-hidden">
-      {/* Search Header */}
+      {/* RESTORED SEARCH HEADER */}
       <div className="px-8 py-6 border-b border-gray-50 flex justify-between items-center bg-gray-50/30">
-        <h3 className="font-serif font-bold text-xl text-gray-800">Orders</h3>
+        <h3 className="font-serif font-bold text-xl text-gray-800">
+          Orders Pool
+        </h3>
         <input
           type="text"
           placeholder="Search Order ID or Name..."
@@ -61,7 +62,6 @@ export default function OrderTable({ orders = [] }) {
         />
       </div>
 
-      {/* Main Table */}
       <div className="overflow-x-auto">
         <table className="w-full text-sm text-left">
           <thead className="bg-gray-50/50 text-[10px] font-black uppercase text-gray-400 tracking-widest">
@@ -126,7 +126,7 @@ export default function OrderTable({ orders = [] }) {
         </table>
       </div>
 
-      {/* Pagination Footer */}
+      {/* RESTORED PAGINATION FOOTER */}
       <div className="px-8 py-5 bg-gray-50/30 border-t border-gray-50 flex items-center justify-between">
         <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest">
           Recent Orders: <span className="text-[#946659]">{orders.length}</span>
@@ -151,7 +151,6 @@ export default function OrderTable({ orders = [] }) {
           </button>
         </div>
       </div>
-
       {/* Invoice Modal */}
       {selectedOrder && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] flex items-center justify-center p-4 text-left">

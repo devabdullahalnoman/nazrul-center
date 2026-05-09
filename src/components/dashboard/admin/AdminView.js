@@ -1,9 +1,9 @@
 "use client";
 import { useAdminDashboard } from "@/hooks/useAdminDashboard";
-import StatCard from "./StatCard";
-import OrderTable from "./OrderTable";
+import StatCard from "../StatCard";
+import OrderTable from "../OrderPool";
 import ContributorsTable from "./ContributorsTable";
-import WishlistTable from "./WishlistTable";
+import WishlistTable from "../WishlistPool";
 
 export default function AdminView() {
   const { stats, orders, contributors, wishlist, loading } =

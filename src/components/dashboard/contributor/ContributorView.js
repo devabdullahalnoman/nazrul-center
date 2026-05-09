@@ -1,38 +1,58 @@
 "use client";
-import StatCard from "../admin/StatCard";
+import React from "react";
+import { useContributorDashboard } from "@/hooks/useContributorDashboard";
+import StatCard from "../StatCard";
+import OrderPool from "../OrderPool"; // Shared component
+import WishlistPool from "../WishlistPool"; // Shared component
 
 export default function ContributorView({ user }) {
+  const { orders, wishlist, stats, loading } = useContributorDashboard();
+
+  if (loading)
+    return (
+      <div className="h-screen flex items-center justify-center font-serif italic text-[#946659] animate-pulse">
+        Initialising Operational Pools...
+      </div>
+    );
+
   return (
-    <div className="space-y-8">
-      <header>
-        <h1 className="text-3xl font-black uppercase italic tracking-tighter">
-          Contributor <span className="text-[#946659]">Workspace</span>
-        </h1>
-        <p className="text-sm font-medium text-gray-500">
-          Editor: {user.full_name}
-        </p>
+    <div className="space-y-10">
+      <header className="flex justify-between items-end">
+        <div>
+          <h1 className="text-3xl font-serif font-bold text-gray-900">
+            Operations Portal
+          </h1>
+          <p className="text-[#946659] font-medium italic">
+            Welcome back, {user?.full_name}
+          </p>
+        </div>
       </header>
 
+      {/* Reusing StatCard */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <StatCard title="Assigned Orders" value="08" icon="📦" />
-        <StatCard title="Drafts" value="03" icon="📝" />
-        <StatCard title="Pending Review" value="01" icon="⏳" />
+        <StatCard
+          title="Active Orders"
+          value={stats.pendingOrders}
+          icon="📦"
+          color="text-amber-600"
+        />
+        <StatCard
+          title="Community Requests"
+          value={stats.wishlistCount}
+          icon="✨"
+          color="text-[#946659]"
+        />
+        <StatCard title="Pool Total" value={stats.totalAssigned} icon="📊" />
       </div>
 
-      <div className="bg-white border-2 border-black rounded-3xl p-8">
-        <h3 className="font-black uppercase text-xs text-gray-400 mb-4">
-          Current Tasks
-        </h3>
-        <ul className="divide-y space-y-3">
-          <li className="pt-3 flex justify-between font-bold text-sm">
-            <span>Verify Nazrul Biography Draft</span>
-            <span className="text-orange-500">URGENT</span>
-          </li>
-          <li className="pt-3 flex justify-between font-bold text-sm">
-            <span>Process Order #1204 - Physical Book</span>
-            <span className="text-gray-400">PENDING</span>
-          </li>
-        </ul>
+      {/* Shared Tables */}
+      <div className="space-y-16">
+        <section>
+          <OrderPool orders={orders} />
+        </section>
+        <section>
+          <WishlistPool wishlist={wishlist} />
+        </section>
       </div>
     </div>
   );

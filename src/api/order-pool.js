@@ -1,10 +1,7 @@
 import { createClient } from "@/lib/supabase/client";
 const supabase = createClient();
 
-export const adminOrdersApi = {
-  /**
-   * Fetches orders with joined customer and operator info.
-   */
+export const orderPoolApi = {
   async getRecentOrders() {
     const { data, error } = await supabase
       .from("orders")
@@ -14,38 +11,28 @@ export const adminOrdersApi = {
         customer:profiles!user_id(id, full_name, phone, address, email),
         operator:profiles!operator_id(id, full_name, email)
       `,
-      )
+      ) // This join is crucial for the "Handled By" section
       .order("created_at", { ascending: false });
 
-    if (error) {
-      console.error("Order Fetch Error:", error.message);
-      return [];
-    }
+    if (error) return [];
     return data || [];
   },
 
-  /**
-   * Updates order status and records the operator handling it.
-   */
   async updateOrderStatus(id, status, operatorId) {
     const { data, error } = await supabase
       .from("orders")
       .update({
-        status: status,
+        status,
         operator_id: operatorId,
         updated_at: new Date().toISOString(),
       })
       .eq("id", id)
       .select(
-        `
-        *,
-        customer:profiles!user_id(full_name, phone, email, address),
-        operator:profiles!operator_id(full_name, email)
-      `,
-      )
-      .single();
+        `*, customer:profiles!user_id(full_name, phone, email, address), operator:profiles!operator_id(full_name, email)`,
+      );
 
-    if (error) throw error;
-    return data;
+    if (error || !data?.length)
+      throw new Error("Update failed or permission denied.");
+    return data[0];
   },
 };

@@ -18,6 +18,7 @@ export default function ContributorsTable({ contributors = [] }) {
   const [modalPage, setModalPage] = useState(1);
   const itemsPerModalPage = 5;
 
+  // Uses 'total_handled' logic if the orders array isn't joined
   const paginatedOrders = useMemo(() => {
     if (!selectedContributor?.orders) return [];
     const start = (modalPage - 1) * itemsPerModalPage;
@@ -167,7 +168,11 @@ export default function ContributorsTable({ contributors = [] }) {
                 Handling History
               </h4>
               <span className="text-[10px] font-black bg-[#946659]/10 text-[#946659] px-3 py-1 rounded-full uppercase">
-                Total Handled: {selectedContributor.orders?.length || 0}
+                {/* Fixed to use the handled count from API */}
+                Total Handled:{" "}
+                {selectedContributor.total_handled ||
+                  selectedContributor.orders?.length ||
+                  0}
               </span>
             </div>
 
@@ -213,7 +218,6 @@ export default function ContributorsTable({ contributors = [] }) {
                 </tbody>
               </table>
 
-              {/* MODAL PAGINATION CONTROLS - Always rendered if contributor exists */}
               <div className="px-6 py-4 bg-gray-100/50 border-t border-gray-100 flex justify-between items-center">
                 <button
                   disabled={modalPage === 1}

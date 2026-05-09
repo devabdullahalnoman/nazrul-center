@@ -2,30 +2,36 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 
 export const updateSession = async (request) => {
+  // 1. Initialize the response
   let response = NextResponse.next({
     request: {
       headers: request.headers,
     },
   });
 
+  // 2. Create the Supabase client with the NEW non-deprecated cookie pattern
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
-        getAll: () => request.cookies.getAll(),
-        setAll: (cookiesToSet) => {
-          // Set cookies on the request for the current execution
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          // Sync cookies to the request (for current middleware/route execution)
           cookiesToSet.forEach(({ name, value, options }) =>
             request.cookies.set(name, value, options),
           );
-          // Create a new response to carry the new cookies
+
+          // Update the response object to send headers back to the browser
           response = NextResponse.next({
             request: {
               headers: request.headers,
             },
           });
-          // Set cookies on the response to send back to the browser
+
+          // Sync cookies to the response
           cookiesToSet.forEach(({ name, value, options }) =>
             response.cookies.set(name, value, options),
           );
@@ -34,7 +40,6 @@ export const updateSession = async (request) => {
     },
   );
 
-  // This re-validates the session and refreshes it if necessary
   await supabase.auth.getUser();
 
   return response;
