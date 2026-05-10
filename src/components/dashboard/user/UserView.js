@@ -1,37 +1,65 @@
 "use client";
+import React from "react";
+import { useUserDashboard } from "@/hooks/useUserDashboard";
+import StatCard from "../StatCard";
+import OrderPool from "../OrderPool"; // Reusing the high-end table component
+import WishlistPool from "../WishlistPool";
 
 export default function UserView({ user }) {
+  const { orders, wishlist, loading } = useUserDashboard(user?.id);
+
+  if (loading)
+    return (
+      <div className="p-10 animate-pulse font-serif italic text-[#946659]">
+        Loading your account...
+      </div>
+    );
+
+  const pendingCount = orders.filter((o) => o.status !== "completed").length;
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-10 animate-in fade-in duration-700">
       <header>
-        <h1 className="text-3xl font-black uppercase tracking-tighter italic">
-          Member <span className="text-[#946659]">Portal</span>
+        <h1 className="text-3xl font-serif font-bold text-gray-900">
+          My Account
         </h1>
-        <p className="text-sm font-medium text-gray-500">
-          Welcome, {user.full_name}
+        <p className="text-[#946659] font-medium italic">
+          Track your orders and book requests
         </p>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-[#946659] text-white p-8 rounded-3xl border-2 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-          <h2 className="text-2xl font-black uppercase italic">My Library</h2>
-          <p className="text-sm opacity-80 mt-2">
-            Access your purchased e-books and research papers here.
-          </p>
-          <button className="mt-6 bg-black text-white px-6 py-2 rounded-xl text-xs font-black uppercase">
-            Open Reader
-          </button>
-        </div>
+        <StatCard
+          title="Active Orders"
+          value={pendingCount}
+          icon="📦"
+          color="text-amber-600"
+        />
+        <StatCard
+          title="My Wishlist"
+          value={wishlist.length}
+          icon="❤️"
+          color="text-[#946659]"
+        />
+      </div>
 
-        <div className="bg-white p-8 rounded-3xl border-2 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-          <h2 className="text-2xl font-black uppercase italic">Wishlist</h2>
-          <p className="text-sm text-gray-500 mt-2">
-            View the items you are tracking for purchase.
-          </p>
-          <button className="mt-6 border-2 border-black px-6 py-2 rounded-xl text-xs font-black uppercase hover:bg-black hover:text-white transition">
-            View Wishlist
-          </button>
-        </div>
+      <div className="space-y-16">
+        <section>
+          <div className="flex justify-between items-end mb-6">
+            <h3 className="text-xl font-serif font-bold text-gray-800">
+              Order History
+            </h3>
+          </div>
+          {/* Reusing OrderPool: It will show only this user's orders */}
+          <OrderPool orders={orders} />
+        </section>
+
+        <section>
+          <h3 className="text-xl font-serif font-bold text-gray-800 mb-6">
+            Personal Wishlist
+          </h3>
+          <WishlistPool wishlist={wishlist} />
+        </section>
       </div>
     </div>
   );

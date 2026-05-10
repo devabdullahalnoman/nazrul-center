@@ -7,19 +7,20 @@ export async function proxy(request) {
   const response = await updateSession(request);
   const supabase = await createClient();
 
+  // Handle all dashboard routes
   if (request.nextUrl.pathname.startsWith("/dashboard")) {
     const {
       data: { user },
     } = await supabase.auth.getUser();
 
-    // Not logged in?
+    // --- GUARD 1: Not logged in? ---
     if (!user) {
       const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("next", request.nextUrl.pathname);
       return NextResponse.redirect(loginUrl);
     }
 
-    // Check Role
+    // Fetch Role from profile
     const { data: profile } = await supabase
       .from("profiles")
       .select("role")
@@ -28,23 +29,30 @@ export async function proxy(request) {
 
     const role = profile?.role;
 
-    // Kick out if not authorized for dashboard at all
-    if (role !== "admin" && role !== "contributor") {
+    // --- GUARD 2: Role Authorization ---
+    // We now allow "user", "admin", and "contributor"
+    const allowedRoles = ["admin", "contributor", "user"];
+
+    if (!role || !allowedRoles.includes(role)) {
+      // If they have no role or a role not in our list, bounce to homepage
       return NextResponse.redirect(new URL("/", request.url));
     }
 
-    // Admin-Only Route Check
+    // --- GUARD 3: Admin-Only Route Protection ---
     const adminOnlyRoutes = [
       "/dashboard/users",
       "/dashboard/publications",
       "/dashboard/inventory",
       "/dashboard/messages",
     ];
-    const isRestricted = adminOnlyRoutes.some((path) =>
+
+    const isRestrictedPath = adminOnlyRoutes.some((path) =>
       request.nextUrl.pathname.startsWith(path),
     );
 
-    if (isRestricted && role !== "admin") {
+    // If it's an admin path and they aren't an admin,
+    // send them back to their respective dashboard home
+    if (isRestrictedPath && role !== "admin") {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
   }
@@ -52,6 +60,7 @@ export async function proxy(request) {
   return response;
 }
 
+// Config matcher stays the same to ensure this runs on the correct paths
 export const config = {
   matcher: [
     "/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp|css|js)$).*)",

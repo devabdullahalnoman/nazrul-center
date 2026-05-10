@@ -1,36 +1,48 @@
+"use client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function ProductCard({ product }) {
+  const router = useRouter();
+
+  const imageSrc =
+    product?.image_url || "https://placehold.co/400x500?text=Nazrul+Center";
+  const productName = product?.item_name || "Untitled Work";
+
   return (
-    <div className="group bg-base-100 border border-base-200 rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300">
-      <div className="relative aspect-4/5 overflow-hidden bg-base-200">
+    <div
+      onClick={() => router.push(`/shop/${product.id}`)}
+      className="group cursor-pointer bg-white border border-gray-100 rounded-[32px] overflow-hidden hover:shadow-2xl transition-all duration-500 flex flex-col h-full"
+    >
+      <div className="relative aspect-[4/5] overflow-hidden bg-gray-50">
         <Image
-          src={product.image}
-          alt={product.name}
+          src={imageSrc}
+          alt={productName}
           fill
-          className="object-cover group-hover:scale-110 transition-transform duration-500"
+          className="object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
         />
-        {product.tag && (
-          <div className="absolute top-4 left-4 badge badge-primary font-bold">
-            {product.tag}
+        {product?.is_featured && (
+          <div className="absolute top-6 left-6 px-4 py-1.5 bg-white/90 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-widest text-[#946659] shadow-sm">
+            Featured
           </div>
         )}
       </div>
 
-      <div className="p-6">
-        <p className="text-xs uppercase tracking-widest text-gray-500 font-bold mb-1">
-          {product.category}
+      <div className="p-8 flex flex-col flex-1">
+        <p className="text-[10px] font-black uppercase text-[#946659] tracking-[0.2em] mb-2">
+          {product?.item_type}
         </p>
-        <h3 className="text-lg font-bold text-neutral mb-2 group-hover:text-primary transition-colors">
-          {product.name}
+        <h3 className="font-serif text-xl font-bold text-gray-900 group-hover:text-[#946659] transition-colors duration-300">
+          {productName}
         </h3>
-        <div className="flex items-center justify-between mt-4">
-          <span className="text-xl font-black text-neutral">
-            ৳{product.price}
+
+        <div className="mt-6 pt-6 border-t border-gray-50 flex items-center justify-between">
+          <span className="text-2xl font-serif font-bold text-gray-900">
+            ৳{product?.price}
           </span>
-          <button className="btn btn-neutral btn-sm rounded-lg">
-            Add to Cart
-          </button>
+          <div className="w-10 h-10 rounded-full bg-gray-900 text-white flex items-center justify-center group-hover:bg-[#946659] transition-all duration-300 shadow-lg">
+            <span className="text-lg">+</span>
+          </div>
         </div>
       </div>
     </div>
