@@ -1,41 +1,24 @@
-"use client";
-import { useEffect } from "react";
-import { useAuth } from "@/hooks/useAuth";
-import Sidebar from "@/components/dashboard/Sidebar";
-import { useRouter } from "next/navigation";
+import { createProxyClient } from "@/lib/supabase/proxy";
+import { DashboardShell } from "@/features/dashboard/shared/components/DashboardShell";
+import { redirect } from "next/navigation";
 
-export default function DashboardLayout({ children }) {
-  const { user, loading } = useAuth();
-  const router = useRouter();
+export default async function DashboardLayout({ children }) {
+  const supabase = await createProxyClient(); // Awaited client factory
+  
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.replace("/login");
-    }
-  }, [user, loading, router]);
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", user.id)
+    .single();
 
-  if (loading) {
-    return (
-      <div className="h-screen flex flex-col items-center justify-center bg-[#FDFCFB]">
-        <div className="w-12 h-12 border-4 border-[#946659]/20 border-t-[#946659] rounded-full animate-spin mb-4"></div>
-        <p className="font-serif italic text-[#946659] animate-pulse">
-          Resuming Session...
-        </p>
-      </div>
-    );
-  }
-
-  if (!user) return null;
+  if (!profile) redirect("/login");
 
   return (
-    <div className="flex bg-[#FDFCFB] min-h-screen">
-      <Sidebar user={user} />
-
-      <main className="flex-1 ml-64 p-8 lg:p-12 overflow-y-auto">
-        <div className="max-w-7xl mx-auto transition-opacity duration-500 ease-in-out">
-          {children}
-        </div>
-      </main>
-    </div>
+    <DashboardShell profile={profile}>
+      {children}
+    </DashboardShell>
   );
 }

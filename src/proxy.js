@@ -1,68 +1,69 @@
-import { updateSession } from "@/lib/supabase/proxy";
-import { createClient } from "@/lib/supabase/server";
+import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 
 export async function proxy(request) {
-  // 1. Sync session (refreshes cookie if expired)
-  const response = await updateSession(request);
-  const supabase = await createClient();
+  let response = NextResponse.next({
+    request: { headers: request.headers },
+  });
 
-  // Handle all dashboard routes
-  if (request.nextUrl.pathname.startsWith("/dashboard")) {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) =>
+            request.cookies.set(name, value, options),
+          );
+          response = NextResponse.next({ request });
+          cookiesToSet.forEach(({ name, value, options }) =>
+            response.cookies.set(name, value, options),
+          );
+        },
+      },
+    },
+  );
 
-    // --- GUARD 1: Not logged in? ---
-    if (!user) {
-      const loginUrl = new URL("/login", request.url);
-      loginUrl.searchParams.set("next", request.nextUrl.pathname);
-      return NextResponse.redirect(loginUrl);
-    }
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-    // Fetch Role from profile
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", user.id)
-      .single();
+  // 1. Protection for all dashboard routes
+  if (!user && request.nextUrl.pathname.startsWith("/dashboard")) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
 
-    const role = profile?.role;
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user?.id)
+    .single();
 
-    // --- GUARD 2: Role Authorization ---
-    // We now allow "user", "admin", and "contributor"
-    const allowedRoles = ["admin", "contributor", "user"];
+  const role = profile?.role;
 
-    if (!role || !allowedRoles.includes(role)) {
-      // If they have no role or a role not in our list, bounce to homepage
-      return NextResponse.redirect(new URL("/", request.url));
-    }
+  // 2. Industry Standard Access Mapping
+  const adminOnly = ["/dashboard/users", "/dashboard/messages"];
+  const staffAllowed = ["/dashboard/inventory", "/dashboard/publications"];
 
-    // --- GUARD 3: Admin-Only Route Protection ---
-    const adminOnlyRoutes = [
-      "/dashboard/users",
-      "/dashboard/publications",
-      "/dashboard/inventory",
-      "/dashboard/messages",
-    ];
+  const isRestrictedPath = adminOnly.some((path) =>
+    request.nextUrl.pathname.startsWith(path),
+  );
+  const isStaffPath = staffAllowed.some((path) =>
+    request.nextUrl.pathname.startsWith(path),
+  );
 
-    const isRestrictedPath = adminOnlyRoutes.some((path) =>
-      request.nextUrl.pathname.startsWith(path),
-    );
+  // Policy: Contributors cannot access Admin-only tools
+  if (role === "contributor" && isRestrictedPath) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
 
-    // If it's an admin path and they aren't an admin,
-    // send them back to their respective dashboard home
-    if (isRestrictedPath && role !== "admin") {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    }
+  // Policy: Standard users cannot access any staff tools
+  if (role === "user" && (isStaffPath || isRestrictedPath)) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   return response;
 }
-
-// Config matcher stays the same to ensure this runs on the correct paths
-export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp|css|js)$).*)",
-  ],
-};

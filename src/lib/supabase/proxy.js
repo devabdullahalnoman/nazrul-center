@@ -1,46 +1,29 @@
 import { createServerClient } from "@supabase/ssr";
-import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
-export const updateSession = async (request) => {
-  // 1. Initialize the response
-  let response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
-  });
+export async function createProxyClient() {
+  // Next.js 16.2 Requirement: cookies() MUST be awaited
+  const cookieStore = await cookies();
 
-  // 2. Create the Supabase client with the NEW non-deprecated cookie pattern
-  const supabase = createServerClient(
+  return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
         getAll() {
-          return request.cookies.getAll();
+          return cookieStore.getAll();
         },
         setAll(cookiesToSet) {
-          // Sync cookies to the request (for current middleware/route execution)
-          cookiesToSet.forEach(({ name, value, options }) =>
-            request.cookies.set(name, value, options),
-          );
-
-          // Update the response object to send headers back to the browser
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          });
-
-          // Sync cookies to the response
-          cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options),
-          );
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options),
+            );
+          } catch (error) {
+            // The root proxy.js (middleware) handles cookie syncing
+            // for the response; safe to ignore here.
+          }
         },
       },
     },
   );
-
-  await supabase.auth.getUser();
-
-  return response;
-};
+}

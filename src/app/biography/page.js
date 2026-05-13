@@ -6,7 +6,7 @@ export default function BiographyPage() {
   return (
     <div className="bg-white min-h-screen">
       {/* Header Section */}
-      <div className="bg-[#D9C7AD] text-[#58161F] py-16 px-4">
+      <div className="bg-nazrul-honeycomb text-nazrul-maroon py-16 px-4">
         <div className="container mx-auto max-w-7xl">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
             Biography Of Kazi Nazrul Islam

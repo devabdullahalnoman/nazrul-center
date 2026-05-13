@@ -1,88 +1,26 @@
-// import { Geist, Geist_Mono } from "next/font/google";
-// import "./globals.css";
-// import Navbar from "@/components/Navbar";
-// import Footer from "@/components/Footer";
-// import QueryProvider from "@/lib/query-provider";
-
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
-
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
-
-// export const metadata = {
-//   title: "Nazrul Center",
-//   description:
-//     "A comprehensive digital archive and resource center dedicated to the life, works, and legacy of Kazi Nazrul Islam, the Rebel Poet of Bengal.",
-// };
-
-// export default function RootLayout({ children }) {
-//   return (
-//     <html lang="en" data-theme="light" suppressHydrationWarning>
-//       <body
-//         className={`${geistSans.variable} antialiased min-h-screen flex flex-col`}
-//         suppressHydrationWarning
-//       >
-//         {/* We will build the Navbar next */}
-//         <header className="sticky top-0 z-50">
-//           <Navbar />
-//         </header>
-
-//         <QueryProvider>
-//           <main className="grow w-full mx-auto">{children}</main>
-//         </QueryProvider>
-
-//         <Footer />
-//       </body>
-//     </html>
-//   );
-// }
-
-import { Geist, Geist_Mono } from "next/font/google";
+import Navbar from "@/components/ui/Navbar";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import QueryProvider from "@/lib/query-provider";
-import FloatingContact from "@/components/FloatingContact";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import ReactQueryProvider from "@/lib/react-query/provider";
 
 export const metadata = {
-  title: "Nazrul Center",
+  title: "Nazrul Center | The Archive & Platform",
   description:
-    "A comprehensive digital archive and resource center dedicated to the life, works, and legacy of Kazi Nazrul Islam, the Rebel Poet of Bengal.",
+    "The official archive and platform dedicated to the Rebel Poet, Kazi Nazrul Islam.",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" data-theme="light" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} antialiased min-h-screen flex flex-col`}
-        suppressHydrationWarning
-      >
-        <header className="sticky top-0 z-50">
+    <html lang="en" suppressHydrationWarning>
+      <body className="antialiased bg-nazrul-base" suppressHydrationWarning>
+        <ReactQueryProvider>
           <Navbar />
-        </header>
-
-        <QueryProvider>
-          <main className="grow w-full mx-auto">{children}</main>
-        </QueryProvider>
-
-        <FloatingContact />
-
-        <Footer />
+          {/* Adding 'pt-20' (or the height of your navbar) 
+              ensures content doesn't start underneath the sticky nav 
+          */}
+          <main className="min-h-screen">
+            {children}
+          </main>
+        </ReactQueryProvider>
       </body>
     </html>
   );

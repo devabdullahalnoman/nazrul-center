@@ -2,34 +2,23 @@
 @plugin "daisyui";
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Nazrul Center Signature Palette */
+  --color-nazrul-base: #fdfcfb; /* Soft Off-White Paper Background */
+  --color-nazrul-terracotta: #946659; /* Primary Action / Clay */
+  --color-nazrul-sand: #d9c7ad; /* Biography Header Beige */
+  --color-nazrul-crimson: #FE2F2F; /* Rebel Red / Historical Emphasis */
+  --color-nazrul-ink: #1c1b1e; /* Deep Ink for Readability */
+  --color-nazrul-maroon: #58161F; /* Heading color fo pages */
+  --color-nazrul-olive: #535C45; /* Subheading color for pages */
+  --color-nazrul-honeycomb: #D9C7AD; /* For Heading Background */
 
-  /* Main Branding Colors */
-  --color-nazrul-bg: #f7e8e3; /* Soft Shell Background */
-  --color-nazrul-rebel: #ff1f1f; /* Electric Red Action */
-  --color-nazrul-ink: #1c1b1e; /* Black Brown Text */
-  --color-nazrul-clay: #b18e83; /* Rosy Brown Accents */
-  --color-nazrul-paper: #fffaf8; /* Bone White Cards */
-  --color-nazrul-muted: #cdcdcd; /* Silver Gray Utility */
-
-  /* Semantic Mapping for DaisyUI or custom components */
-  --color-primary: var(--color-nazrul-rebel);
-  --color-secondary: var(--color-nazrul-ink);
-  --color-accent: var(--color-nazrul-clay);
+  --font-serif: var(--font-playfair), serif;
+  --font-sans: var(--font-geist-sans), sans-serif;
 }
 
-/* Optional: Set the default body background */
 body {
-  background-color: var(--color-nazrul-bg);
+  background-color: var(--color-nazrul-base);
   color: var(--color-nazrul-ink);
-}
-
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-/* Hide scrollbar for IE, Edge and Firefox */
-.hide-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
