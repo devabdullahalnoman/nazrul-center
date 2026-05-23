@@ -14,7 +14,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-[#F8F8F8] text-gray-800 border-t border-gray-200/60 pt-12 pb-6 px-3 sm:px-6 lg:px-4 xl:px-18 min-[1360px]:px-10 min-[1550px]:px-16">
-      <div className="w-full max-w-[1920px] mx-auto">
+      <div className="w-full max-w-480 mx-auto">
         
         {/* Main Footer Grid Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 xl:gap-12 mb-10">
@@ -27,7 +27,7 @@ export default function Footer() {
                 alt="Logo"
                 width={240}
                 height={80}
-                className="w-[140px] xl:w-[180px] min-[1440px]:w-[210px] h-auto transition-all"
+                className="w-35 xl:w-45 min-[1440px]:w-52.5 h-auto transition-all"
               />
             </Link>
             <p className={`${commonFontSize} text-gray-600 font-medium leading-relaxed max-w-sm`}>
@@ -37,7 +37,7 @@ export default function Footer() {
 
           {/* Column 2: Quick Navigation Links */}
           <div>
-            <h3 className="text-[16px] xl:text-[18px] font-bold text-[#946659] mb-4">
+            <h3 className="text-[16px] xl:text-[18px] font-bold text-nazrul-terracotta mb-4">
               Quick Links
             </h3>
             <ul className="flex flex-col gap-2.5 list-none m-0 p-0">
@@ -71,24 +71,24 @@ export default function Footer() {
 
           {/* Column 3: Contact Channels */}
           <div>
-            <h3 className="text-[16px] xl:text-[18px] font-bold text-[#946659] mb-4">
+            <h3 className="text-[16px] xl:text-[18px] font-bold text-nazrul-terracotta mb-4">
               Contact Us
             </h3>
             <ul className="flex flex-col gap-3.5 list-none m-0 p-0 text-gray-600">
               <li className="flex items-start gap-2.5">
-                <MapPin className="w-5 h-5 text-[#946659] shrink-0 mt-0.5" />
+                <MapPin className="w-5 h-5 text-nazrul-terracotta shrink-0 mt-0.5" />
                 <span className={`${commonFontSize} font-medium`}>
                   123 Nazrul Avenue, Dhaka, Bangladesh
                 </span>
               </li>
               <li className="flex items-center gap-2.5">
-                <Phone className="w-5 h-5 text-[#946659] shrink-0" />
+                <Phone className="w-5 h-5 text-nazrul-terracotta shrink-0" />
                 <span className={`${commonFontSize} font-medium`}>
                   +880 1234-567890
                 </span>
               </li>
               <li className="flex items-center gap-2.5">
-                <Mail className="w-5 h-5 text-[#946659] shrink-0" />
+                <Mail className="w-5 h-5 text-nazrul-terracotta shrink-0" />
                 <a href="mailto:info@nazrulcenter.org" className={`${commonFontSize} font-medium hover:text-nazrul-crimson transition-colors`}>
                   info@nazrulcenter.org
                 </a>
@@ -98,7 +98,7 @@ export default function Footer() {
 
           {/* Column 4: Newsletter & Community Engagement */}
           <div className="flex flex-col gap-4">
-            <h3 className="text-[16px] xl:text-[18px] font-bold text-[#946659]">
+            <h3 className="text-[16px] xl:text-[18px] font-bold text-nazrul-terracotta">
               Stay Connected
             </h3>
             <p className={`${commonFontSize} text-gray-600 font-medium leading-relaxed`}>
@@ -108,12 +108,12 @@ export default function Footer() {
               <input
                 type="email"
                 placeholder="Your email address"
-                className="flex-1 bg-white border border-gray-300 rounded-lg px-3 py-2 text-[14px] outline-none focus:border-[#946659] transition-colors"
+                className="flex-1 bg-white border border-gray-300 rounded-lg px-3 py-2 text-[14px] outline-none focus:border-nazrul-terracotta transition-colors"
                 required
               />
               <button
                 type="submit"
-                className="bg-[#946659] hover:bg-[#7a5449] text-white font-bold px-4 py-2 text-[14px] rounded-lg transition-colors shadow-sm"
+                className="bg-nazrul-terracotta hover:bg-nazrul-crimson text-white font-bold px-4 py-2 text-[14px] rounded-lg transition-colors shadow-sm"
               >
                 Join
               </button>
