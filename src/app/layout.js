@@ -1,6 +1,7 @@
 import Navbar from "@/components/ui/Navbar";
 import "./globals.css";
 import ReactQueryProvider from "@/lib/react-query/provider";
+import Footer from "@/components/ui/Footer";
 
 export const metadata = {
   title: "Nazrul Center | The Archive & Platform",
@@ -16,6 +17,7 @@ export default function RootLayout({ children }) {
           <Navbar />
           <main className="min-h-screen">{children}</main>
         </ReactQueryProvider>
+        <Footer></Footer>
       </body>
     </html>
   );
