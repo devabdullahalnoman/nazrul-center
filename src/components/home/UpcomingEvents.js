@@ -87,7 +87,7 @@ export default function UpcomingEvent() {
               <span className="bg-[#d4af37] text-black text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block shadow-sm">
                 Next Event
               </span>
-              <h3 className="text-2xl sm:text-3xl font-black text-nazrul-terracotta drop-shadow-md">
+              <h3 className="text-2xl sm:text-3xl font-black text-nazrul-sand drop-shadow-md">
                 127th Nazrul Jayanti
               </h3>
               <p className="text-sm font-medium mt-1 text-nazrul-crimson">
