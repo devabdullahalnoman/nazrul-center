@@ -135,14 +135,14 @@ const NavItems = memo(
               <Link
                 href="/login"
                 onClick={onClose}
-                className="px-3 py-2.5 text-[16px] font-bold text-[#946659] hover:bg-gray-50 rounded-lg transition-colors"
+                className="px-3 py-2.5 text-[16px] font-bold text-nazrul-terracotta hover:bg-gray-50 rounded-lg transition-colors"
               >
                 Log In
               </Link>
               <Link
                 href="/register"
                 onClick={onClose}
-                className="px-3 py-2.5 text-[16px] font-bold text-white bg-[#946659] hover:bg-[#7a5449] rounded-lg transition-colors text-center mt-1"
+                className="px-3 py-2.5 text-[16px] font-bold text-white bg-nazrul-terracotta hover:bg-[#7a5449] rounded-lg transition-colors text-center mt-1"
               >
                 Register
               </Link>
@@ -167,7 +167,10 @@ export default function Navbar() {
   const itemCount = useCartStore((state) => state.getItemCount());
 
   useEffect(() => {
-    setMounted(true);
+    // Wrapped execution inside a timeout thread callback clear from cascading updates execution loop
+    const mountTimer = setTimeout(() => {
+      setMounted(true);
+    }, 0);
 
     let ticking = false;
     const handleScroll = () => {
@@ -211,7 +214,10 @@ export default function Navbar() {
 
     evaluateAnalytics();
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      clearTimeout(mountTimer);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   const handleLogout = async () => {
@@ -221,9 +227,9 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`sticky top-0 z-[100] transition-all duration-300 bg-[#F8F8F8] text-gray-800 py-2 px-3 sm:px-6 lg:px-4 xl:px-18 min-[1360px]:px-10 min-[1550px]:px-16 ${!isScrolled ? "shadow-none" : "shadow-lg"}`}
+      className={`sticky top-0 z-100 transition-all duration-300 bg-[#F8F8F8] text-gray-800 py-2 px-3 sm:px-6 lg:px-4 xl:px-18 min-[1360px]:px-10 min-[1550px]:px-16 ${!isScrolled ? "shadow-none" : "shadow-lg"}`}
     >
-      <div className="flex items-center justify-between w-full max-w-[1920px] mx-auto gap-1">
+      <div className="flex items-center justify-between w-full max-w-480 mx-auto gap-1">
         {/* LEFT CONTAINER: Hamburger, Compact Fluid Logo, Views Badge */}
         <div className="flex items-center shrink-0">
           <div className="lg:hidden relative">
@@ -252,7 +258,7 @@ export default function Navbar() {
             </button>
 
             {isOpen && (
-              <ul className="absolute left-0 mt-4 p-4 shadow-2xl bg-white rounded-2xl w-[85vw] max-w-[300px] border border-gray-100 text-gray-800 flex flex-col gap-1 z-[110] list-none">
+              <ul className="absolute left-0 mt-4 p-4 shadow-2xl bg-white rounded-2xl w-[85vw] max-w-75 border border-gray-100 text-gray-800 flex flex-col gap-1 z-110 list-none">
                 <NavItems
                   isMobile={true}
                   pathname={pathname}
@@ -271,13 +277,13 @@ export default function Navbar() {
               width={280}
               height={95}
               priority
-              className="w-[120px] sm:w-[140px] lg:w-[145px] xl:w-[195px] min-[1360px]:w-[195px] min-[1440px]:w-[230px] min-[1550px]:w-[270px] h-auto transition-all duration-300 shrink-0"
+              className="w-30 sm:w-35 lg:w-36.25 xl:w-48.75 min-[1360px]:w-48.75 min-[1440px]:w-57.5 min-[1550px]:w-67.5 h-auto transition-all duration-300 shrink-0"
             />
           </Link>
 
           {mounted && (
             <div className="flex items-center gap-1 ml-2 xl:ml-3 px-2 py-0.5 xl:py-1 bg-gray-200/50 border border-gray-300/30 rounded-full text-gray-600 font-sans tracking-wide shrink-0">
-              <Eye className="w-3.5 h-3.5 text-[#946659]" />
+              <Eye className="w-3.5 h-3.5 text-nazrul-terracotta" />
               <span className="text-[12px] xl:text-[13px] font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap">
                 <span className="hidden min-[1360px]:inline">Views: </span>
                 {visits > 0 ? visits.toLocaleString() : "..."}
@@ -287,7 +293,7 @@ export default function Navbar() {
         </div>
 
         {/* CENTER CONTAINER: Modern responsive gap distribution with built-in safety */}
-        <div className="hidden lg:flex items-center justify-center flex-1 mx-2">
+        <div className="hidden lg:flex items-center justify-end flex-1 mx-2">
           <ul className="flex items-center gap-1 xl:gap-2.5 min-[1360px]:gap-4 min-[1440px]:gap-6 min-[1550px]:gap-8 list-none m-0 p-0">
             <NavItems isMobile={false} pathname={pathname} />
           </ul>
@@ -312,13 +318,13 @@ export default function Navbar() {
             <div className="hidden sm:flex items-center gap-2 xl:gap-3 min-[1360px]:gap-5 shrink-0">
               <Link
                 href="/login"
-                className={`${commonFontSize} ${commonWeight} text-[#946659] hover:text-nazrul-crimson transition-colors whitespace-nowrap`}
+                className={`${commonFontSize} ${commonWeight} text-nazrul-terracotta hover:text-nazrul-crimson transition-colors whitespace-nowrap`}
               >
                 Log In
               </Link>
               <Link
                 href="/register"
-                className={`flex items-center justify-center h-8 xl:h-8.5 min-[1360px]:h-10 border-none bg-[#946659] text-white px-3.5 xl:px-4 min-[1360px]:px-5 min-[1550px]:px-7 rounded-full shadow-md hover:bg-nazrul-crimson transition-all ${commonFontSize} ${commonWeight} whitespace-nowrap`}
+                className={`flex items-center justify-center h-8 xl:h-8.5 min-[1360px]:h-10 border-none bg-nazrul-terracotta text-white px-3.5 xl:px-4 min-[1360px]:px-5 min-[1550px]:px-7 rounded-full shadow-md hover:bg-nazrul-crimson transition-all ${commonFontSize} ${commonWeight} whitespace-nowrap`}
               >
                 Register
               </Link>
@@ -328,15 +334,15 @@ export default function Navbar() {
               <div
                 tabIndex={0}
                 role="button"
-                className="btn btn-ghost btn-circle avatar border-2 border-[#946659] h-8 w-8 xl:h-8.5 xl:w-8.5 min-[1360px]:h-10 min-[1360px]:w-10 min-h-0"
+                className="btn btn-ghost btn-circle avatar border-2 border-nazrul-terracotta h-8 w-8 xl:h-8.5 xl:w-8.5 min-[1360px]:h-10 min-[1360px]:w-10 min-h-0"
               >
-                <div className="w-full h-full rounded-full bg-gray-100 flex items-center justify-center font-bold uppercase text-[#946659] text-[14px] xl:text-[15px] min-[1360px]:text-[17px]">
+                <div className="w-full h-full rounded-full bg-gray-100 flex items-center justify-center font-bold uppercase text-nazrul-terracotta text-[14px] xl:text-[15px] min-[1360px]:text-[17px]">
                   {user.email?.[0]}
                 </div>
               </div>
               <ul
                 tabIndex={0}
-                className="dropdown-content menu mt-3 z-[10] p-2 shadow-2xl bg-white rounded-box w-56 border text-gray-800"
+                className="dropdown-content menu mt-3 z-10 p-2 shadow-2xl bg-white rounded-box w-56 border text-gray-800"
               >
                 <li className="border-b pb-2 mb-2 px-4 py-2 text-[14px] opacity-70 truncate font-medium">
                   {user.email}
@@ -356,7 +362,7 @@ export default function Navbar() {
                   >
                     Cart
                     {mounted && itemCount > 0 && (
-                      <span className="badge badge-sm bg-[#946659] text-white border-none">
+                      <span className="badge badge-sm bg-nazrul-terracotta text-white border-none">
                         {itemCount}
                       </span>
                     )}
