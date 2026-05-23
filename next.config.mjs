@@ -13,9 +13,15 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "rhaxakxqjpkjepkhpdnu.supabase.co", // Your Supabase Host
+        hostname: "rhaxakxqjpkjepkhpdnu.supabase.co",
         port: "",
-        pathname: "/storage/v1/object/public/**", // Matches all public storage files
+        pathname: "/storage/v1/object/public/**",
+      },
+      {
+        protocol: "https",
+        hostname: "ui-avatars.com",
+        port: "",
+        pathname: "/api/**",
       },
       {
         protocol: "https",
@@ -30,10 +36,50 @@ const nextConfig = {
         pathname: "/storage/v1/object/public/**",
       },
       {
-        protocol: 'https',
-        hostname: 'sandbox.sslcommerz.com',
+        protocol: "https",
+        hostname: "sandbox.sslcommerz.com",
       },
     ],
+  },
+  headers: async () => {
+    const cspHeader = `
+      default-src 'self';
+      script-src 'self' https://*.sslcommerz.com;
+      style-src 'self' 'unsafe-inline';
+      img-src 'self' data: https: rhaxakxqjpkjepkhpdnu.supabase.co;
+      connect-src 'self' https://*.supabase.co;
+      frame-ancestors 'none';
+      base-uri 'self';
+      form-action 'self';
+    `;
+
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: cspHeader.replace(/\n/g, "").replace(/\s+/g, " ").trim(),
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+          {
+            key: "X-Frame-Options",
+            value: "DENY",
+          },
+          {
+            key: "X-XSS-Protection",
+            value: "1; mode=block",
+          },
+          {
+            key: "Referrer-Policy",
+            value: "strict-origin-when-cross-origin",
+          },
+        ],
+      },
+    ];
   },
 };
 

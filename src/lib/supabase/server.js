@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
-export const createClient = async () => {
+export async function createClient() {
   const cookieStore = await cookies();
 
   return createServerClient(
@@ -18,10 +18,10 @@ export const createClient = async () => {
               cookieStore.set(name, value, options);
             });
           } catch (error) {
-            // Ignored in Server Components
+            // Contextually suppresses cookie assignment during static generation phases
           }
         },
       },
     },
   );
-};
+}

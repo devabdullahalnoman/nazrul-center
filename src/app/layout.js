@@ -14,12 +14,7 @@ export default function RootLayout({ children }) {
       <body className="antialiased bg-nazrul-base" suppressHydrationWarning>
         <ReactQueryProvider>
           <Navbar />
-          {/* Adding 'pt-20' (or the height of your navbar) 
-              ensures content doesn't start underneath the sticky nav 
-          */}
-          <main className="min-h-screen">
-            {children}
-          </main>
+          <main className="min-h-screen">{children}</main>
         </ReactQueryProvider>
       </body>
     </html>

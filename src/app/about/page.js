@@ -2,30 +2,27 @@ import { aboutData } from "@/components/about/aboutData";
 
 export default function AboutPage() {
   return (
-    <div className="bg-base-100 min-h-screen pb-20">
+    <div className="min-h-screen pb-20">
       {/* Hero Header */}
-      <div className="bg-neutral text-neutral-content py-20 px-4">
-        <div className="container mx-auto max-w-5xl">
-          <h1 className="text-3xl md:text-5xl font-bold mb-6 text-primary">
+      <div className="bg-nazrul-honeycomb py-1 px-4">
+        <div className="container mx-auto max-w-7xl my-10">
+          <h1 className="text-4xl md:text-6xl font-bold mb-4 text-nazrul-maroon">
             {aboutData.header.title}
           </h1>
-          <p className="text-xl leading-relaxed mb-8">
+          <p className="text-2xl text-nazrul-olive font-semibold tracking-wide">
             {aboutData.header.subtitle}
           </p>
-          <div className="bg-white/10 p-6 rounded-2xl border border-white/20 italic">
-            {aboutData.header.launchInfo}
-          </div>
         </div>
       </div>
 
-      <div className="container mx-auto max-w-5xl px-4 py-16">
+      <div className="container mx-auto max-w-5xl px-4 py-16 text-nazrul-ink">
         <div className="space-y-16">
           {aboutData.sections.map((section, idx) => (
             <section
               key={idx}
               className="border-b border-base-200 pb-12 last:border-0"
             >
-              <h2 className="text-3xl font-bold text-neutral mb-6">
+              <h2 className="text-4xl text-nazrul-maroon font-bold mb-6">
                 {section.title}
               </h2>
 
@@ -33,14 +30,14 @@ export default function AboutPage() {
                 section.content.map((p, pIdx) => (
                   <p
                     key={pIdx}
-                    className="text-lg text-gray-700 mb-4 leading-relaxed"
+                    className="text-xl text-gray-700 mb-4 leading-relaxed"
                   >
                     {p}
                   </p>
                 ))}
 
               {section.listTitle && (
-                <p className="font-bold text-lg mb-4 text-neutral">
+                <p className="font-bold text-2xl mb-4 text-neutral">
                   {section.listTitle}
                 </p>
               )}
@@ -48,7 +45,7 @@ export default function AboutPage() {
               {section.list && (
                 <ul className="list-disc pl-6 space-y-3 mb-6">
                   {section.list.map((item, lIdx) => (
-                    <li key={lIdx} className="text-lg text-gray-700">
+                    <li key={lIdx} className="text-xl text-gray-700">
                       {item}
                     </li>
                   ))}
@@ -56,7 +53,7 @@ export default function AboutPage() {
               )}
 
               {section.footer && (
-                <p className="text-lg text-gray-700 italic border-l-4 border-primary pl-4 py-2 bg-base-200 rounded-r-lg">
+                <p className="text-lg text-gray-700 italic border-l-4 border-nazrul-crimson pl-4 py-2 rounded-lg">
                   {section.footer}
                 </p>
               )}
@@ -64,14 +61,14 @@ export default function AboutPage() {
           ))}
 
           {/* Management Section */}
-          <section className="bg-neutral text-neutral-content p-10 rounded-4xl shadow-xl">
+          <section className="bg-nazrul-sand text-nazrul-maroon p-10 rounded-4xl shadow-xl">
             <h2 className="text-3xl font-bold mb-10 border-b border-white/20 pb-4">
               Founder & Advisors
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
               {aboutData.management.founderAdvisors.map((person, pIdx) => (
                 <div key={pIdx} className="flex flex-col">
-                  <span className="text-xl font-bold text-primary">
+                  <span className="text-xl font-bold text-nazrul">
                     {person.name}
                   </span>
                   <span className="opacity-80">{person.role}</span>
@@ -79,13 +76,13 @@ export default function AboutPage() {
               ))}
             </div>
 
-            <h3 className="text-2xl font-bold mb-6 text-primary">
+            <h3 className="text-2xl font-bold mb-6 text-nazrul-maroon">
               With support from:
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {aboutData.management.support.map((org, oIdx) => (
                 <div key={oIdx} className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-primary rounded-full"></div>
+                  <div className="w-2 h-2 bg-nazrul-crimson rounded-full"></div>
                   <span className="text-lg opacity-90">{org}</span>
                 </div>
               ))}

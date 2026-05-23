@@ -11,7 +11,7 @@ export default function BiographyPage() {
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
             Biography Of Kazi Nazrul Islam
           </h1>
-          <p className="text-2xl text-[#233620] font-semibold tracking-wide">
+          <p className="text-2xl text-nazrul-olive font-semibold tracking-wide">
             The Rebel Poet of Bengal
           </p>
         </div>

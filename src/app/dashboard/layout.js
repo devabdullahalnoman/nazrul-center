@@ -1,11 +1,13 @@
-import { createProxyClient } from "@/lib/supabase/proxy";
+import { createClient } from "@/lib/supabase/server"; // Updated import for server-side client factory
 import { DashboardShell } from "@/features/dashboard/shared/components/DashboardShell";
 import { redirect } from "next/navigation";
 
 export default async function DashboardLayout({ children }) {
-  const supabase = await createProxyClient(); // Awaited client factory
-  
-  const { data: { user } } = await supabase.auth.getUser();
+  const supabase = await createClient(); // Awaited client factory
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
   const { data: profile } = await supabase
@@ -16,9 +18,5 @@ export default async function DashboardLayout({ children }) {
 
   if (!profile) redirect("/login");
 
-  return (
-    <DashboardShell profile={profile}>
-      {children}
-    </DashboardShell>
-  );
+  return <DashboardShell profile={profile}>{children}</DashboardShell>;
 }

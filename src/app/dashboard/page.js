@@ -1,10 +1,10 @@
-import { createProxyClient } from "@/lib/supabase/proxy";
+import { createClient } from "@/lib/supabase/server";
 import { AdminView } from "@/features/dashboard/admin/components/AdminView";
 import { ContributorView } from "@/features/dashboard/contributor/components/ContributorView";
 import { UserView } from "@/features/dashboard/user/components/UserView";
 
 export default async function DashboardPage() {
-  const supabase = await createProxyClient();
+  const supabase = await createClient();
 
   const {
     data: { user },
