@@ -98,8 +98,7 @@ export const aboutData = {
       "Nazrul Tirtho, Kolkata",
       "Nazrul Academy, Dhaka",
       "Nazrul University, Trishal, Mymensingh",
-      "Green dot",
-      "Prime Bank Ltd",
+      "Artisan"
     ],
   },
 };

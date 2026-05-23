@@ -15,13 +15,14 @@ export default function Home() {
     <>
       <main>
         <Hero />
-        <FeaturedBooks></FeaturedBooks>
+        {/* <FeaturedBooks></FeaturedBooks> */}
+        <BioSpotlight></BioSpotlight>
         <MediaSpotlight></MediaSpotlight>
         <PopularSongs></PopularSongs>
-        <BioSpotlight></BioSpotlight>
+        
         <Publications></Publications>
         <UpcomingEvents></UpcomingEvents>
-        <NewsEvents></NewsEvents>
+        {/* <NewsEvents></NewsEvents> */}
         <Timeline></Timeline>
         <SupportSection></SupportSection>
         <Newsletter></Newsletter>
