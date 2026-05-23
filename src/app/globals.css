@@ -6,11 +6,12 @@
   --color-nazrul-base: #fdfcfb; /* Soft Off-White Paper Background */
   --color-nazrul-terracotta: #946659; /* Primary Action / Clay */
   --color-nazrul-sand: #d9c7ad; /* Biography Header Beige */
-  --color-nazrul-crimson: #FE2F2F; /* Rebel Red / Historical Emphasis */
+  --color-nazrul-crimson: #fe2f2f; /* Rebel Red / Historical Emphasis */
   --color-nazrul-ink: #1c1b1e; /* Deep Ink for Readability */
-  --color-nazrul-maroon: #58161F; /* Heading color fo pages */
+  --color-nazrul-maroon: #58161f; /* Heading color fo pages */
   --color-nazrul-olive: #233620; /* Subheading color for pages */
-  --color-nazrul-honeycomb: #D9C7AD; /* For Heading Background */
+  --color-nazrul-honeycomb: #d9c7ad; /* For Heading Background */
+  --color-nazrul-offwhite: #fcfaf9; /* For conrast Background */
 
   --font-serif: var(--font-playfair), serif;
   --font-sans: var(--font-geist-sans), sans-serif;

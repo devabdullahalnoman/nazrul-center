@@ -3,14 +3,14 @@ export default function MediaSpotlight() {
   const videoId = "Fy6LJAT2hkI?si=Pkp2auyzEn-lVZlu";
 
   return (
-    <section className="py-20 bg-[#fcfaf9]">
+    <section className="py-20 bg-nazrul-offwhite">
       <div className="container mx-auto px-6">
         {/* Heading Section */}
         <div className="max-w-3xl mb-10">
-          <h2 className="text-4xl md:text-5xl font-black text-gray-900 leading-tight">
-            Biography of Nazrul
+          <h2 className="text-4xl md:text-5xl font-black text-nazrul-terracotta leading-tight">
+            <p className="text-3xl text-nazrul-crimson font-medium">Nazrul Center Presents</p><p>Biography of Nazrul</p>
           </h2>
-          <div className="h-1.5 w-20 bg-primary mt-4 rounded-full"></div>
+          <div className="h-1.5 w-20 bg-nazrul-crimson mt-4 rounded-full"></div>
         </div>
 
         {/* Bigger Video Player Section */}
@@ -34,20 +34,14 @@ export default function MediaSpotlight() {
           {/* Context/Description Side - Right (or Bottom on Mobile) */}
           <div className="w-full space-y-6 flex flex-col justify-center items-center lg:w-3/4">
             <div className="space-y-4">
-              <p className="text-xl text-gray-600 italic font-medium leading-relaxed border-l-4 border-gray-200 pl-4">
+              <p className="text-2xl text-nazrul-crimson italic font-medium leading-relaxed border-l-4 rounded-md border-nazrul-crimson pl-4">
                 &quot;I am the rebel poet, I am the heart of the world.&quot;
               </p>
-              <p className="text-gray-500 leading-relaxed text-sm md:text-base">
-                Watch the award-winning documentary covering the scattered
+              <p className="text-nazrul-terracotta leading-relaxed text-sm md:text-3xl italic">
+                Nazrul Center presents documentary covering the scattered
                 memories of Nazrul Islam from Churulia to Dhaka. This film
                 explores his unwavering spirit and revolutionary contributions.
               </p>
-            </div>
-
-            <div className="pt-4">
-              <button className="w-full py-3 px-6 rounded-xl border-2 border-gray-900 text-gray-900 font-bold hover:bg-gray-900 hover:text-white transition-all active:scale-95">
-                Watch Film Details
-              </button>
             </div>
           </div>
         </div>

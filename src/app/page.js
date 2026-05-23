@@ -23,7 +23,7 @@ export default function Home() {
         <Publications></Publications>
         <UpcomingEvents></UpcomingEvents>
         {/* <NewsEvents></NewsEvents> */}
-        <Timeline></Timeline>
+        {/* <Timeline></Timeline> */}
         <SupportSection></SupportSection>
         <Newsletter></Newsletter>
       </main>

@@ -26,17 +26,18 @@ export default function Publications() {
   ];
 
   return (
-    <section className="py-14 bg-[#F8F8F8]">
+    <section className="py-14 bg-nazrul-offwhite">
       <div className="container mx-auto px-6">
         {/* Reduced gap from 10/12 to 6 here */}
         <div className="flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-12">
           {/* Left Side: Content */}
           <div className="w-full lg:w-[40%] space-y-5 text-center lg:text-left">
             <div className="space-y-2">
-              <h2 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tight">
+              <h2 className="text-4xl font-black text-nazrul-terracotta tracking-tight">
                 Publications
               </h2>
-              <p className="text-gray-600 text-sm md:text-base leading-relaxed max-w-md mx-auto lg:mx-0">
+              <div className="h-1.5 w-16 bg-nazrul-crimson mt-3 rounded-full"></div>
+              <p className="text-gray-600 text-sm md:text-xl leading-relaxed max-w-md mx-auto lg:mx-0">
                 Explore the literary works of Kazi Nazrul Islam and scholarly
                 publications written about his life and contributions.
               </p>
@@ -45,7 +46,7 @@ export default function Publications() {
             <div className="flex justify-center lg:justify-start">
               <Link
                 href="/publications"
-                className="bg-[#a38070] text-white px-7 py-3 rounded-md font-bold text-xs uppercase tracking-widest hover:bg-[#8c6d5e] transition-all shadow-sm"
+                className="bg-nazrul-terracotta text-white px-7 py-3 rounded-3xl font-bold text-lg  hover:bg-nazrul-crimson transition-all shadow-sm"
               >
                 View More
               </Link>
@@ -55,11 +56,11 @@ export default function Publications() {
           {/* Right Side: Compact Image Grid */}
           <div className="w-full lg:w-[45%] flex justify-center items-center">
             {/* max-w-[420px] ensures it doesn't get too large on wide screens */}
-            <div className="grid grid-cols-2 gap-4 md:gap-6 w-full max-w-420px">
+            <div className="grid grid-cols-2 gap-4 md:gap-6 w-100">
               {books.map((book, index) => (
                 <div
                   key={book.id}
-                  className={`relative aspect-2/3 w-full overflow-hidden rounded shadow-md transition-transform duration-500 hover:scale-[1.03] ${
+                  className={`relative aspect-4/6 w-full overflow-hidden rounded shadow-md transition-transform duration-500 hover:scale-[1.03] ${
                     // Subtler stagger (mt-6) for a tighter look
                     index % 2 !== 0 ? "mt-6" : ""
                   }`}
