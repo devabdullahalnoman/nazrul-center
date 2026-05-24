@@ -27,7 +27,7 @@ export function useAuth() {
     mutationFn: authApi.register,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["auth-user"] });
-      router.push("/dashboard");
+      router.push("/verify-email");
     },
   });
 
