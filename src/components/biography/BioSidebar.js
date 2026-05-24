@@ -7,19 +7,19 @@ export default function BioSidebar() {
         </h3>
         <ul className="menu menu-sm p-0 font-medium gap-2">
           <li>
-            <a href="#Early" className="hover:text-primary transition-colors">
+            <a href="#Early" className="hover:text-nazrul-crimson text-xl transition-colors">
               Early Life
             </a>
           </li>
           <li>
-            <a href="#Family" className="hover:text-primary transition-colors">
+            <a href="#Family" className="hover:text-nazrul-crimson text-xl transition-colors">
               Family & Education
             </a>
           </li>
           <li>
             <a
               href="#Literary"
-              className="hover:text-primary transition-colors"
+              className="hover:text-nazrul-crimson text-xl transition-colors"
             >
               Literary Journey
             </a>
@@ -27,40 +27,40 @@ export default function BioSidebar() {
           <li>
             <a
               href="#Revolutionary"
-              className="hover:text-primary transition-colors"
+              className="hover:text-nazrul-crimson text-xl transition-colors"
             >
               Revolutionary Spirit
             </a>
           </li>
           <li>
-            <a href="#Prison" className="hover:text-primary transition-colors">
+            <a href="#Prison" className="hover:text-nazrul-crimson text-xl transition-colors">
               Prison Life
             </a>
           </li>
           <li>
-            <a href="#Musical" className="hover:text-primary transition-colors">
+            <a href="#Musical" className="hover:text-nazrul-crimson text-xl transition-colors">
               Musical Contribution
             </a>
           </li>
           <li>
-            <a href="#Film" className="hover:text-primary transition-colors">
+            <a href="#Film" className="hover:text-nazrul-crimson text-xl transition-colors">
               Film & Radio
             </a>
           </li>
           <li>
-            <a href="#Tragedy" className="hover:text-primary transition-colors">
+            <a href="#Tragedy" className="hover:text-nazrul-crimson text-xl transition-colors">
               Tragedy & Illness
             </a>
           </li>
           <li>
-            <a href="#Awards" className="hover:text-primary transition-colors">
+            <a href="#Awards" className="hover:text-nazrul-crimson text-xl transition-colors">
               Awards
             </a>
           </li>
           <li>
             <a
               href="#Timeline"
-              className="hover:text-primary transition-colors font-bold text-secondary"
+              className="hover:text-nazrul-crimson text-xl transition-colors"
             >
               Timeline
             </a>

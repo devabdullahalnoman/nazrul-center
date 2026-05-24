@@ -5,7 +5,7 @@ export default function FloatingContact() {
   return (
     <Link
       href="/contact"
-      className="fixed bottom-6 right-6 z-[99] flex items-center justify-center w-12 h-12 md:w-14 md:h-14 bg-[#946659] text-white rounded-full shadow-2xl hover:bg-primary hover:scale-110 transition-all duration-300 group"
+      className="fixed bottom-6 right-6 z-99 flex items-center justify-center w-12 h-12 md:w-14 md:h-14 bg-nazrul-terracotta text-white rounded-full shadow-2xl hover:bg-primary hover:scale-110 transition-all duration-300 group"
       aria-label="Contact Us"
     >
       {/* Chat Icon */}

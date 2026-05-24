@@ -3,14 +3,14 @@ import VideoPlayer from "@/components/documentary/VideoPlayer";
 
 export default function DocumentaryFilmPage() {
   return (
-    <div className="bg-base-100 min-h-screen pb-20">
+    <div className="b min-h-screen pb-20">
       {/* Header Area */}
-      <div className="bg-neutral text-neutral-content py-16 px-4">
+      <div className="bg-nazrul-honeycomb py-16 mb-4 px-4">
         <div className="container mx-auto max-w-7xl text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
+          <h1 className="text-4xl text-nazrul-maroon md:text-6xl font-bold mb-6">
             Documentary Film
           </h1>
-          <p className="text-xl text-primary font-medium italic">
+          <p className="text-2xl text-nazrul-olive font-bold italic">
             &ldquo;{featuredFilm.title}&rdquo;
           </p>
         </div>
@@ -23,10 +23,10 @@ export default function DocumentaryFilmPage() {
         {/* Film Details Section */}
         <div className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
           <div className="lg:col-span-2">
-            <h2 className="text-3xl font-bold mb-6 border-b border-base-300 pb-2 text-neutral">
+            <h2 className="text-4xl font-bold text-nazrul-terracotta mb-6 border-b border-nazrul-crimson pb-2">
               About the Film
             </h2>
-            <p className="text-lg text-gray-700 leading-relaxed mb-6">
+            <p className="text-2xl text-gray-700 leading-relaxed mb-6">
               {featuredFilm.description}
             </p>
             <div className="flex flex-wrap gap-4">
@@ -36,24 +36,26 @@ export default function DocumentaryFilmPage() {
               <div className="badge badge-lg badge-outline p-4">
                 Full Documentary
               </div>
-              <div className="badge badge-lg badge-primary badge-outline p-4">
+              <div className="badge badge-lg badge-outline p-4">
                 Official Archive
               </div>
             </div>
           </div>
 
           {/* Credits Sidebar */}
-          <div className="bg-base-200 p-8 rounded-3xl h-fit border border-base-300">
-            <h3 className="font-bold text-xl mb-4 border-b border-base-300 pb-2">
+          <div className="bg-nazrul-sand p-8 rounded-3xl h-fit border border-base-300">
+            <h3 className="font-bold text-3xl mb-4 border-b text-nazrul-maroon border-nazrul-crimson pb-2">
               Production Credits
             </h3>
             <ul className="space-y-4">
               {featuredFilm.credits.map((credit, idx) => (
                 <li key={idx}>
-                  <p className="text-xs uppercase tracking-widest text-gray-500 font-bold">
+                  <p className="leading-relaxed uppercase tracking-widest text-gray-500 font-bold">
                     {credit.role}
                   </p>
-                  <p className="text-neutral font-medium">{credit.name}</p>
+                  <p className="text-nazrul-olive text-2xl font-bold">
+                    {credit.name}
+                  </p>
                 </li>
               ))}
             </ul>

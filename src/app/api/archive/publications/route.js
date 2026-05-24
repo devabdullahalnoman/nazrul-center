@@ -30,7 +30,7 @@ export async function GET(req) {
 
     let query = supabase
       .from("publications")
-      .select("id, title, category, cover_url, year, is_featured");
+      .select("id, title, category, cover_url, year, is_featured, author");
 
     if (isFeatured) {
       query = query.eq("is_featured", true);

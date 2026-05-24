@@ -17,7 +17,7 @@ export default function FeaturedBooks() {
   if (isError || !books || books.length === 0) return null;
 
   return (
-    <section className="py-16 bg-[#fcfaf9]">
+    <section className="py-16 bg-nazrul-offwhite">
       <div className="container mx-auto px-6">
         {/* Header */}
         <div className="mb-10">

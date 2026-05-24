@@ -9,10 +9,10 @@ export default async function ShopPage() {
       {/* Shop Header Section */}
       <div className="py-16 px-4 bg-nazrul-honeycomb">
         <div className="container mx-auto max-w-7xl">
-          <h1 className="text-4xl md:text-7xl font-serif font-bold mb-4 text-nazrul-base">
+          <h1 className="text-4xl md:text-6xl font-bold text-nazrul-maroon mb-4">
             Official Shop
           </h1>
-          <p className="text-xl font-semibold text-nazrul-olive">
+          <p className="text-2xl text-nazrul-olive font-semibold tracking-wide">
             Carry the legacy of the Rebel Poet with you.
           </p>
         </div>

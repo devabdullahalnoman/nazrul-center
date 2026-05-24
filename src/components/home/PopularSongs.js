@@ -35,7 +35,7 @@ export default function PopularSongs() {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
           <div>
             <h2 className="text-4xl font-black text-nazrul-terracotta tracking-tight">
-              Popular Songs
+              Nazrul&apos;s Creations
             </h2>
             <div className="h-1.5 w-16 bg-nazrul-crimson mt-3 rounded-full"></div>
           </div>
